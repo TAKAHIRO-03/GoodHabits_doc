@@ -1,0 +1,17 @@
+[Home]
+welcome
+news
+--
+click signin
+==> SignIn
+
+[SignIn]
+--
+submit
+==> Dashboard
+
+[Dashboard]
+inbox
+--
+click signout
+==> Home
