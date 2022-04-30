@@ -23,41 +23,158 @@ clk 1-7
 ==> Instagram
 
 [Twitter]
-Studieee公式アカウント
+2-1:Studieee公式アカウント
 --
 
 [Instagram]
-Studieee公式アカウント
+3-1:Studieee公式アカウント
 --
 
 [body]
-2-1:はじめる
-2-2:Studieeeとは
-2-3:特徴紹介
-2-4:ユーザーの声
-2-5:よくある質問
+4-1:はじめる
+4-2:Studieeeとは
+4-3:特徴紹介
+4-4:ユーザーの声
+4-5:よくある質問
 --
-clk 2-1
+clk 4-1
 ==> /signin
 
-[/signin]
-3-1:メールアドレスでログイン
-3-2:Googleアカウントでログイン
-3-3:アカウント作成
-3-4:Studieeeとは
+[footer]
+5-1:運営
+5-2:利用規約
+5-3:プライバシーポリシー
+5-4:特定商取引法に基づく表記
+5-5:お問い合わせ
+5-6:はじめる
 --
-clk 3-1
-==> /login
+clk 5-1
+==> /company
+clk 5-2
+==> /terms
+clk 5-3
+==> /pp
+clk 5-4
+==> /asct
+clk 5-5
+==> mail app
+clk 5-6
+==> /signin
+
+[/company]
+6-1:運営者の情報
+--
+
+[/terms]
+7-1:利用規約
+--
+
+[/pp]
+8-1:プライバシーポリシー
+--
+
+[/asct]
+9-1:特定商取引法に基づく表記
+--
+
+[mail app]
+10-1:a tagのmailto機能でメールアプリ起動
+--
+
+[/signin]
+11-1:メールアドレスでログイン
+11-2:Googleアカウントでログイン
+11-3:アカウント作成
+11-4:Studieeeとは
+--
+clk 11-1
+==>/login
+clk 11-2
+==>Google OAuth
+clk 11-3
+==>/signup
+clk 11-4
+==>/howto
 
 [/login]
-4-1:メールアドレス
-4-2:パスワード
-4-3:パスワードをお忘れの方
-4-4:プライバシーポリシー
-4-5:ログイン
+12-1:メールアドレス
+12-2:パスワード
+12-3:パスワードをお忘れの方
+12-4:プライバシーポリシー
+12-5:ログイン
 --
-input 4-1 and input 4-2, clk 4-5
-==> Dashboard
+input 12-1,12-2 then clk 12-5
+==>/plan
+clk 12-3
+==>/forgotPass
 
-[Dashboard]
+[/signup]
+13-1:メールアドレス
+13-2:パスワード
+13-3:確認パスワード
+13-4:利用規約チェック
+13-5:プライバシーポリシー
+13-6:アカウントを作成
 --
+input 13-1,13-2,13-3,13-4 then clk 13-6
+==>Authentication
+
+[Google OAuth]
+14-1:Google認証
+--
+
+[Authentication]
+15-1:認証中
+--
+
+[/auth/account?auth_token=hogehoge]
+16-1:認証済み
+--
+clk me
+==>/plan
+
+[/forgotPass]
+17-1:メールアドレス
+17-2:送信
+--
+input 17-1 then clk 17-2
+==>Authentication Pass
+
+[Authentication Pass]
+18-1:認証中
+--
+
+[/forgotPass/reinput?auth_token=hogehoge]
+19-1:パスワード
+19-2:確認パスワード
+19-3:再登録
+--
+input 19-1,19-2 then clk 19-3
+==>/login
+
+[/plan]
+20-1:計画する
+20-2:使い方
+--
+clk 20-1
+==>Planning
+clk 20-2
+==>/howto
+
+[Planning]
+20-1:タイトル
+20-2:日付
+20-3:タスク内容
+20-4:登録
+--
+input 20-1,20-2,20-3 then clk 20-4
+==>/plan
+
+[/howto]
+21-1:使い方（詳細）
+21-2:始める
+--
+clk 21-2
+==>/plan
+
+
