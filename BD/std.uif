@@ -1,17 +1,63 @@
-[Home]
-welcome
-news
+[header]
+1-1:Studieeeとは
+1-2:特徴紹介
+1-3:使い方
+1-4:ユーザーの声
+1-5:よくある質問
+1-6:Twitter
+1-7:Instagram
 --
-click signin
-==> SignIn
+clk 1-1
+==> body
+clk 1-2
+==> body
+clk 1-3
+==> body
+clk 1-4
+==> body
+clk 1-5
+==> body
+clk 1-6
+==> Twitter
+clk 1-7
+==> Instagram
 
-[SignIn]
+[Twitter]
+Studieee公式アカウント
 --
-submit
+
+[Instagram]
+Studieee公式アカウント
+--
+
+[body]
+2-1:はじめる
+2-2:Studieeeとは
+2-3:特徴紹介
+2-4:ユーザーの声
+2-5:よくある質問
+--
+clk 2-1
+==> /signin
+
+[/signin]
+3-1:メールアドレスでログイン
+3-2:Googleアカウントでログイン
+3-3:アカウント作成
+3-4:Studieeeとは
+--
+clk 3-1
+==> /login
+
+[/login]
+4-1:メールアドレス
+4-2:パスワード
+4-3:パスワードをお忘れの方
+4-4:プライバシーポリシー
+4-5:ログイン
+--
+input 4-1 and input 4-2, clk 4-5
 ==> Dashboard
 
 [Dashboard]
-inbox
 --
-click signout
-==> Home
