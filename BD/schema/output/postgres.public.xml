@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="postgres" schema="public" type="PostgreSQL - 13.6 (Debian 13.6-1.pgdg110+1)">
+   <tables>
+      <table name="accounts" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="mail" nullable="false" remarks="" size="256" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="password" nullable="true" remarks="" size="60" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_date" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="mail" sequenceNumberInPK="1"/>
+         <index name="accounts_pkey" unique="true">
+            <column ascending="true" name="mail"/>
+         </index>
+      </table>
+   </tables>
+</database>

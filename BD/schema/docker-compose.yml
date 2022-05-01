@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:13.6
+    container_name: db-ctr
+    ports:
+      - "4325:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
+      - DATABASE_HOST=localhost
+    volumes:
+      - $PWD/sql:/docker-entrypoint-initdb.d
