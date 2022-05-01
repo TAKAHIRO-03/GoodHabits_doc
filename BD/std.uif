@@ -127,7 +127,7 @@ input 13-1,13-2,13-3,13-4 then clk 13-6
 15-1:認証中
 --
 
-[/auth/account?auth_token=hogehoge]
+[/auth/account?authToken=hogehoge]
 16-1:認証済み
 --
 clk me
@@ -144,7 +144,7 @@ input 17-1 then clk 17-2
 18-1:認証中
 --
 
-[/forgotPass/reinput?auth_token=hogehoge]
+[/forgotPass/reinput?authToken=hogehoge]
 19-1:パスワード
 19-2:確認パスワード
 19-3:再登録

@@ -1,0 +1,82 @@
+@startuml アカウント登録
+autonumber "[000]"
+title アカウント登録
+
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+!pragma teoz true
+
+User -> Browser: 起動
+User -> Browser: /singupリクエスト()
+Browser -> WebServer: /singup 静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> Browser: レンダリング()
+
+User -> Browser: 入力・送信押下\n(メールアドレス,パスワード,\n確認パスワード,利用規約チェック)
+Browser -> Browser: 入力値チェック\n(メールアドレス,パスワード,\n確認パスワード,利用規約チェック)
+alt 不正な入力値の場合
+  Browser --> Browser: エラー画面表示()
+end
+Browser -> AppServer: 送信\n(メールアドレス,パスワード,\n確認パスワード,利用チェック)
+alt 不正な入力値の場合
+  AppServer --> Browser: 応答\n(400,エラーメッセージ)
+  Browser -> Browser: エラー画面表示()
+end
+
+AppServer --> Browser: 応答(201)
+
+group NoSQLにアカウント情報仮登録\n及びメール送信(非同期)
+  autonumber "[000]"
+  AppServer -> AppServer: 認証トークン発行()
+  note right of AppServer
+    認証トークンはUUIDを発行する
+  end note
+  AppServer -> AppServer: パスワードハッシュ化\n(パスワード)
+  note right of AppServer
+    ハッシュ化するための実装は、
+    BCryptPasswordEncoder or
+    Pbkdf2PasswordEncoder を使用することを検討中
+  end note
+  AppServer -> NoSQL: アカウント情報仮登録\n(認証トークン,メールアドレス,パスワード)
+  note right of AppServer
+    アカウント仮登録情報のTTLは1日
+    Redisのデータ型はHash型を使用する
+    　親キー:認証トークン, 子キー:メールアドレス, 値:パスワード
+  end note
+  NoSQL --> AppServer: 応答()
+  AppServer -> MailServer: メール送信(認証トークン,メールアドレス)
+  MailServer --> AppServer: 応答()
+end
+
+…ユーザーがメール受信後…
+autonumber "[000]"
+
+User -> MailBox: メール確認()
+User -> Browser: /auth/account?authToken=hogehoge\nリクエスト()
+Browser -> WebServer: /auth/account\n静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> Browser: レンダリング()
+Browser -> AppServer: トークン送信(認証トークン)
+AppServer -> NoSQL: アカウント仮登録情報参照\n(認証トークン)
+NoSQL --> AppServer: 応答(メールアドレス,パスワード)
+alt 認証トークンが存在しない時
+  AppServer --> Browser: 応答(404,エラーメッセージ)
+  Browser -> Browser: エラー内容表示()
+  Browser -> Browser: / リダイレクト()
+end
+AppServer -> RDB: アカウント登録情報レコード登録\n(メールアドレス,パスワード)
+RDB --> AppServer: 応答()
+AppServer -> NoSQL: 認証トークン削除(認証トークン)
+NoSQL --> AppServer: 応答()
+ref over AppServer,RDB,NoSQL: 認証(メールアドレス, パスワード)
+
+AppServer --> Browser: 応答(JWT,リフレッシュトークン)
+Browser -> Browser: /plan リダイレクト()
+
+@enduml
