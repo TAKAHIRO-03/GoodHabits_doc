@@ -29,6 +29,7 @@ cloud AWS {
       }
     }
     node RDS
+    node ElastiCache
   }
   node SES
 }
@@ -39,10 +40,9 @@ Internet_Gateway --> ALB
 ALB --> Task
 Task --> RDS
 Task --> SES
+Task --> ElastiCache
 
 ```
-
-タスクの台数を増やした時のJWTとRT（リフレッシュトークン）の持ちまわしで問題が起こる可能性があるため、ElastiCacheの利用を検討 ★TODO
 
 ## NW構成
 
@@ -56,6 +56,7 @@ Task --> SES
 | バックエンド:ALB              | デフォルト        | 未定     | 443        | 〇    |     |
 | バックエンド:Task             | デフォルト        | 未定     | 8080 or 80 | ×    |     |
 | バックエンド:RDS              | デフォルト        | 未定     | 5432       | ×    |     |
+| バックエンド:ElastiCache      | デフォルト        | 未定     | 6379       | ×    |     |
 | バックエンド:SES              | デフォルト        | 未定     | 465 or 2645  | ×    |     |
 
 
@@ -132,12 +133,14 @@ frame backend {
 }
 
 frame DB {
+  node Redis
   node PostgreSQL
 }
 
 User --> React_JavaScript
 User --> SpringBoot_Java
 SpringBoot_Java --> PostgreSQL
+SpringBoot_Java --> Redis
 ```
 
 商用環境はS3を静的ホスティングしてJSファイルを配置、backendはAWSのFargate上にTaskとして構築する。
@@ -149,6 +152,7 @@ SpringBoot_Java --> PostgreSQL
 | SpringBoot  | 2.6.7  |
 | Java        | 17     |
 | PostgreSQL  | 14.2   |
+| Redis       | 6.2.6  |
 
 2022/04/29 時点での最新または安定バージョンを選定
 
