@@ -151,7 +151,7 @@ SpringBoot_Java --> Redis
 | JavaScript  | ES2022 |
 | SpringBoot  | 2.6.7  |
 | Java        | 17     |
-| PostgreSQL  | 14.2   |
+| PostgreSQL  | 13.6   |
 | Redis       | 6.2.6  |
 
 2022/04/29 時点での最新または安定バージョンを選定
