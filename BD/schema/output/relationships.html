@@ -77,10 +77,39 @@
                 </section>
                 <!-- Main content -->
                 <section class="content">
-                    <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h4><i class="icon fa fa-ban"></i> Missed Relationships!</h4>
-                        <p>No relationships were detected in the schema.</p>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 class="box-title">Diagrams</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom">
+                                <!-- Tabs within a box -->
+                                <h5>By default only columns that are primary keys, foreign keys or indexes are shown.</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#compactDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact</a></li>
+                                    <li class=""><a href="#largeDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="compactDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactRelationshipsDiagram" name="compactRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/account.html" target="_top" title="account" alt="" coords="5,76,164,193">
+<area shape="rect" id="node2" href="tables/failed_auth.html" target="_top" title="failed_auth" alt="" coords="214,5,386,128">
+<area shape="rect" id="node3" href="tables/success_auth.html" target="_top" title="success_auth" alt="" coords="208,145,392,268">
+</map>
+                                        <a name='diagram'><img id="compactDegreeImg" src="diagrams/summary/relationships.real.compact.png" usemap="#compactRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeRelationshipsDiagram" name="largeRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/account.html" target="_top" title="account" alt="" coords="5,76,164,287">
+<area shape="rect" id="node2" href="tables/failed_auth.html" target="_top" title="failed_auth" alt="" coords="214,5,386,128">
+<area shape="rect" id="node3" href="tables/success_auth.html" target="_top" title="success_auth" alt="" coords="208,145,392,268">
+</map>
+                                        <a name='diagram'><img id="largeDegreeImg" src="diagrams/summary/relationships.real.large.png" usemap="#largeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
                     </div>
                 </section>
             </div>
