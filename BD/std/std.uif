@@ -1,5 +1,5 @@
-[header]
-1-1:Studieeeとは
+[home_header]
+1-1:GoodHabitsとは
 1-2:特徴紹介
 1-3:使い方
 1-4:ユーザーの声
@@ -8,31 +8,31 @@
 1-7:Instagram
 --
 clk 1-1
-==> body
+==> home_body
 clk 1-2
-==> body
+==> home_body
 clk 1-3
-==> body
+==> home_body
 clk 1-4
-==> body
+==> home_body
 clk 1-5
-==> body
+==> home_body
 clk 1-6
 ==> Twitter
 clk 1-7
 ==> Instagram
 
 [Twitter]
-2-1:Studieee公式アカウント
+2-1:GoodHabits公式アカウント
 --
 
 [Instagram]
-3-1:Studieee公式アカウント
+3-1:GoodHabits公式アカウント
 --
 
-[body]
+[home_body]
 4-1:はじめる
-4-2:Studieeeとは
+4-2:GoodHabitsとは
 4-3:特徴紹介
 4-4:ユーザーの声
 4-5:よくある質問
@@ -40,7 +40,7 @@ clk 1-7
 clk 4-1
 ==> /signin
 
-[footer]
+[home_footer]
 5-1:運営
 5-2:利用規約
 5-3:プライバシーポリシー
@@ -85,7 +85,7 @@ clk 5-6
 11-1:メールアドレスでログイン
 11-2:Googleアカウントでログイン
 11-3:アカウント作成
-11-4:Studieeeとは
+11-4:GoodHabitsとは
 --
 clk 11-1
 ==>/login
@@ -106,17 +106,18 @@ clk 11-4
 input 12-1,12-2 then clk 12-5
 ==>/plan
 clk 12-3
-==>/forgotPass
+==>/reissue/create
 
 [/signup]
 13-1:メールアドレス
 13-2:パスワード
 13-3:確認パスワード
-13-4:利用規約チェック
-13-5:プライバシーポリシー
-13-6:アカウントを作成
+13-4:タイムゾーン
+13-5:利用規約チェック
+13-6:プライバシーポリシー
+13-7:アカウントを作成
 --
-input 13-1,13-2,13-3,13-4 then clk 13-6
+input 13-1,13-2,13-3,13-4,13-5 then clk 13-6
 ==>Authentication
 
 [Google OAuth]
@@ -133,7 +134,7 @@ input 13-1,13-2,13-3,13-4 then clk 13-6
 clk me
 ==>/plan
 
-[/forgotPass]
+[/reissue/create]
 17-1:メールアドレス
 17-2:送信
 --
@@ -144,7 +145,7 @@ input 17-1 then clk 17-2
 18-1:認証中
 --
 
-[/forgotPass/reinput?authToken=hogehoge]
+[/reissue/resetpass?authToken=hogehoge]
 19-1:パスワード
 19-2:確認パスワード
 19-3:再登録
@@ -163,11 +164,12 @@ clk 20-2
 
 [Planning]
 20-1:タイトル
-20-2:日付
-20-3:タスク内容
-20-4:登録
+20-2:開始日時
+20-3:終了日時
+20-4:金額
+20-5:登録
 --
-input 20-1,20-2,20-3 then clk 20-4
+input 20-1,20-2,20-3,20-4 then clk 20-5
 ==>/plan
 
 [/howto]
@@ -177,4 +179,63 @@ input 20-1,20-2,20-3 then clk 20-4
 clk 21-2
 ==>/plan
 
+[plan_header]
+22-1:GoodHabitsとは
+22-2:履歴
+22-3:パスワード変更
+22-4:決済方法
+22-5:ログアウト
+22-6:退会
+22-7:利用規約
+22-8:プライバシーポリシー
+22-9:特定商取引法に基づく表記
+22-10:お問い合わせ
+--
+clk 22-1
+==> /howto
+clk 22-2
+==> /history
+clk 22-3
+==> /newpass
+clk 22-4
+==> /payment
+clk 22-5
+==> Logout
+clk 22-6
+==> Quit
+clk 22-7
+==> /terms
+clk 22-8
+==> /pp
+clk 22-9
+==> /asct
+clk 22-10
+==> mail app
+
+[/history]
+利用回数
+払わずに済んだ金額
+--
+
+[/newpass]
+古いパスワード
+新しいパスワード
+新しい確認パスワード
+--
+
+[/payment]
+クレジットカード番号
+名前
+期限
+セキュリティコード
+登録
+--
+
+[Logout]
+ログアウト
+--
+
+[Quit]
+退会
+--
 
