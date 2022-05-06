@@ -74,6 +74,19 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>failed_auth</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div><!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p>認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報</p>
+                        </div><!-- /.box-body -->
+                    </div>
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -103,9 +116,9 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="username">username</span></td>
-                                    <td>varchar</td>
-                                    <td>256</td>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="account_id">account_id</span></td>
+                                    <td>int8</td>
+                                    <td>19</td>
                                     <td title=''></td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -116,17 +129,17 @@
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                             <tr>
-                                                <td title="failed_auth.username references account.username via failed_auth_username_fkey"><a href='account.html'>account</a><span class='relatedKey'>.username</span></td>
-                                                <td class="constraint detail">failed_auth_username_fkey<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                                <td title="failed_auth.account_id references account.id via failed_auth_account_id_fkey"><a href='account.html'>account</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">failed_auth_account_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
                                             </tr>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>アカウントID。</p></td>
                                 </tr>
                                 <tr>
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="auth_ts">auth_ts</span></td>
-                                    <td>timestamp</td>
-                                    <td>29,6</td>
+                                    <td>timestamptz</td>
+                                    <td>35,6</td>
                                     <td title=''></td>
                                     <td title=''></td>
                                     <td>CURRENT_TIMESTAMP</td>
@@ -138,7 +151,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>認証失敗時のタイムスタンプ</p></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -168,7 +181,7 @@
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> failed_auth_pkey</td>
                                     <td>Primary key</td>
                                     <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-                                    <td>username + auth_ts</td>
+                                    <td>account_id + auth_ts</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -193,16 +206,16 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="208,5,476,133">
-<area shape="rect" id="node2" href="account.html" target="_top" title="account" alt="" coords="5,8,164,125">
+<area shape="rect" id="node1" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="208,5,488,133">
+<area shape="rect" id="node2" href="account.html" target="_top" title="account" alt="" coords="5,8,164,155">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/failed_auth.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="208,5,476,133">
-<area shape="rect" id="node2" href="account.html" target="_top" title="account" alt="" coords="5,79,164,196">
-<area shape="rect" id="node3" href="success_auth.html" target="_top" title="success_auth" alt="" coords="250,151,434,239">
+<area shape="rect" id="node1" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="208,5,488,133">
+<area shape="rect" id="node2" href="account.html" target="_top" title="account" alt="" coords="5,79,164,225">
+<area shape="rect" id="node3" href="planned_task.html" target="_top" title="planned_task" alt="" coords="255,151,441,239">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/failed_auth.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

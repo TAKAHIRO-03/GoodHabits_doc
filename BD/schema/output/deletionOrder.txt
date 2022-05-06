@@ -1,4 +1,7 @@
-role
-success_auth
+roles
+mergin_time
+payment_job_history
 failed_auth
+executed_task
+planned_task
 account
