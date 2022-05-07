@@ -13,19 +13,23 @@
 * バックエンド
 ```plantuml
 actor User
+cloud Internet
+node Stripe
 
 cloud AWS {
-  node Internet_Gateway
+  node InternetGateway
   node ACM
   node Route53
 
   frame Public.subnet {
     node ALB
+    node NatGateway
   }
   frame Private.subnet {
     frame Fargate {
-      frame backend_service {
-        node Task
+      frame backendservice {
+        node TaskApp
+        node TaskJob
       }
     }
     node RDS
@@ -34,13 +38,39 @@ cloud AWS {
   node SES
 }
 
-User --> Route53
-Route53 --> Internet_Gateway
-Internet_Gateway --> ALB
-ALB --> Task
-Task --> RDS
-Task --> SES
-Task --> ElastiCache
+User --[#red]> Internet
+Internet --[#red]> Route53
+Route53 --[#red]> InternetGateway
+InternetGateway --[#red]> ALB
+ALB --[#red]> TaskApp
+TaskApp --[#red]> RDS
+TaskApp --[#red]> SES
+TaskApp --[#red]> ElastiCache
+TaskJob --[#blue]> RDS
+TaskJob --[#blue]> NatGateway
+NatGateway --[#blue]> InternetGateway
+InternetGateway --[#blue]> Internet
+Internet --[#blue]> Stripe
+
+node Comment
+note bottom of Comment
+赤矢印・・・ユーザーがRESTAPI通信の流れ
+青矢印・・・バッチ処理時の通信の流れ
+User・・・GoodHabitsを利用するユーザー
+ACM・・・SSL証明書のサービス
+Internet・・・インターネット回線
+Stripe・・決済処理を行う外部サービス
+Route53・・・DNSサーバー
+InternetGateway・・・VPCとインターネット間の接続端点
+NatGateway・・・プライベートサブネットから外部接続単点
+ALB・・・ロードバランサー
+TaskApp・・・RESTAPIサーバーコンテナ
+TaskJob・・・バッチジョブコンテナ
+RDS・・・データベース
+ElastiCache・・・NoSQL
+SES・・・メールサーバー
+
+end note
 
 ```
 
@@ -52,7 +82,8 @@ Task --> ElastiCache
 | ----------------------- | ------------ | ------ | ---------- | ---- | --- |
 | クライアント:Route53          | goodhabits.com | 未定     | 443        | 〇    |     |
 | バックエンド:Route53          | デフォルト        | 未定     | 443        | 〇    |     |
-| バックエンド:Internet_Gateway | デフォルト        | 未定     | 443        | 〇    |     |
+| バックエンド:InternetGateway | デフォルト        | 未定     | 443        | 〇    |     |
+| バックエンド:NATGateway       | デフォルト        | 未定     | 未定       | 〇    |     |
 | バックエンド:ALB              | デフォルト        | 未定     | 443        | 〇    |     |
 | バックエンド:Task             | デフォルト        | 未定     | 8080 or 80 | ×    |     |
 | バックエンド:RDS              | デフォルト        | 未定     | 5432       | ×    |     |
@@ -105,7 +136,7 @@ Task --> ElastiCache
   * ユーザーがパスワードを忘れた場合は、メール経由で再設定する。
     * パスワードの再設定は24時間以内とする。パスワード再設定がされずに24時間経過した場合、DBに保存されているデータは削除する。
 * タスク計画機能
-  * ユーザーが開始時間と終了時間、タスク内容を入力後、タスク実施の決意表明として運営にお金を支払う。
+  * ユーザーが開始時間と終了時間、タスク内容を入力後、タスク実施の決意表明として運営にお金を支払う。計画の時点では決済処理はされない。
   * 複数のタスクを計画出来る。
   * タスク登録時にリピート登録出来る。例）1週間 毎日9時にランニングを行う。
   * 計画しているタスクを確認出来る。
@@ -121,15 +152,26 @@ Task --> ElastiCache
   * 画面に表示されている退会ボタンを押下することによりGoodHabitsを退会することが出来る。
   * GoodHabitsで保持しているデータは全て物理削除される。
 
+## バッチジョブ一覧
+* 決済処理
+  * ペナルティとなるユーザーの決済処理を実行する。
+  * バッチジョブの対象となる条件は以下となる（ユースケース：条件式）。
+    * サボった : ジョブ履歴に残っていない かつ タスクが開始・終了されていない かつ 計画の終了日時がジョブの実行時間より過去
+    * 終了ボタンを押し忘れた : ジョブ履歴に残っていない かつ タスクが開始されている かつ タスクが終了していない かつ 計画の終了日時と現在時刻の差が5分以上 かつ 計画の終了日時がジョブの実行時間より過去
+    * 計画された時間内に出来なかった : ジョブ履歴に残っていない かつ タスクが開始・終了されている かつ 未達成 かつ 計画の終了日時がジョブの実行時間より過去
+  
 ## ソフトウェア構成
 
 ```plantuml
 actor User
 
-node React_JavaScript
+frame frontend {
+  node React_JavaScript
+}
 
 frame backend {
   node SpringBoot_Java
+  node SpringBatch_Java
 }
 
 frame DB {
@@ -137,10 +179,16 @@ frame DB {
   node PostgreSQL
 }
 
+frame 外部サービス {
+  node Stripe
+}
+
 User --> React_JavaScript
 User --> SpringBoot_Java
 SpringBoot_Java --> PostgreSQL
 SpringBoot_Java --> Redis
+SpringBatch_Java --> PostgreSQL
+SpringBatch_Java --> Stripe
 ```
 
 商用環境はS3を静的ホスティングしてJSファイルを配置、backendはAWSのFargate上にTaskとして構築する。
@@ -150,6 +198,7 @@ SpringBoot_Java --> Redis
 | React       | 18.1.0 |
 | JavaScript  | ES2022 |
 | SpringBoot  | 2.6.7  |
+| SpringBatch | 4.3.5  |
 | Java        | 17     |
 | PostgreSQL  | 13.6   |
 | Redis       | 6.2.6  |
@@ -181,3 +230,7 @@ paramは必ずプレースホルダー（:param）にバインド（割り当て
 * 認証については、JWTとリフレッシュトークンの実装を行う。
 
 [SPAのログイン認証のベストプラクティスがわからなかったのでわりと網羅的に研究してみた〜JWT or Session どっち？〜](https://qiita.com/Hiro-mi/items/18e00060a0f8654f49d6)
+
+## ログ方針
+* GoodHabitsにアクセス出来ないことが理由で、ユーザーにペナルティが発生した場合をデバッグログからトレース出来ること。
+
