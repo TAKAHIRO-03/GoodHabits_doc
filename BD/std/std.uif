@@ -83,17 +83,14 @@ clk 5-6
 
 [/signin]
 11-1:メールアドレスでログイン
-11-2:Googleアカウントでログイン
-11-3:アカウント作成
-11-4:GoodHabitsとは
+11-2:アカウント作成
+11-3:GoodHabitsとは
 --
 clk 11-1
 ==>/login
 clk 11-2
-==>Google OAuth
-clk 11-3
 ==>/signup
-clk 11-4
+clk 11-3
 ==>/howto
 
 [/login]
@@ -117,12 +114,8 @@ clk 12-3
 13-6:プライバシーポリシー
 13-7:アカウントを作成
 --
-input 13-1,13-2,13-3,13-4,13-5 then clk 13-6
+input 13-1,13-2,13-3,13-4,13-5 then clk 13-7
 ==>Authentication
-
-[Google OAuth]
-14-1:Google認証
---
 
 [Authentication]
 15-1:認証中
@@ -131,7 +124,7 @@ input 13-1,13-2,13-3,13-4,13-5 then clk 13-6
 [/auth/account?authToken=hogehoge]
 16-1:認証済み
 --
-clk me
+clk me then redirect /plan
 ==>/plan
 
 [/reissue/create]
@@ -168,6 +161,9 @@ clk 20-2
 20-3:終了日時
 20-4:金額
 20-5:登録
+20-6:リピート有効化
+20-7:リピート期間
+20-8:リピート曜日
 --
 input 20-1,20-2,20-3,20-4 then clk 20-5
 ==>/plan
@@ -198,7 +194,7 @@ clk 22-2
 clk 22-3
 ==> /newpass
 clk 22-4
-==> /payment
+==> Payment
 clk 22-5
 ==> Logout
 clk 22-6
@@ -223,7 +219,7 @@ clk 22-10
 新しい確認パスワード
 --
 
-[/payment]
+[Payment]
 クレジットカード番号
 名前
 期限
@@ -239,3 +235,10 @@ clk 22-10
 退会
 --
 
+[/notfound]
+404画面
+--
+
+[/maintenance]
+503画面
+--
