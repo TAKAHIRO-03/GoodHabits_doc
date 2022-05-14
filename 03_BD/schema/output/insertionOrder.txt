@@ -1,3 +1,5 @@
+oauth_provider
+timezones
 account
 planned_task
 executed_task

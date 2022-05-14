@@ -5,3 +5,5 @@ failed_auth
 executed_task
 planned_task
 account
+timezones
+oauth_provider

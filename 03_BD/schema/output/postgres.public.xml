@@ -6,17 +6,22 @@
    </sequences>
    <tables>
       <table name="account" numRows="0" remarks="アカウント情報。ユーザの登録済みアカウント情報を保持する。" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('account_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="識別子。" size="19" type="bigserial" typeCode="-5">
+         <column autoUpdated="true" defaultValue="nextval('account_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="アカウントID。" size="19" type="bigserial" typeCode="-5">
             <child column="account_id" foreignKey="failed_auth_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="failed_auth"/>
             <child column="account_id" foreignKey="planned_task_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="planned_task"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="username" nullable="false" remarks="ユーザー名。メールアドレスの形式で保持する。ログインIDとしても使用される。" size="256" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="password" nullable="false" remarks="パスワード。ハッシュ化された状態で保持する。" size="60" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="password" nullable="true" remarks="パスワード。ハッシュ化された状態で保持する。" size="60" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="roles" nullable="false" remarks="権限。1アカウントで複数の権限を保有している" size="30" type="_varchar" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="is_locked" nullable="false" remarks="アカウントロックBool値。true=ロックされている。false=ロックされていない" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="tz" nullable="false" remarks="タイムゾーン" size="10" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="6" name="created_time" nullable="false" remarks="作成日時" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="7" name="updated_time" nullable="false" remarks="更新日時" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="'Asia/Tokyo'::text" digits="0" id="5" name="timezones_name" nullable="false" remarks="タイムゾーン" size="2147483647" type="text" typeCode="12">
+            <parent column="name" foreignKey="account_timezones_name_fkey" implied="false" onDeleteCascade="false" schema="public" table="timezones"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="oauth_provider_id" nullable="true" remarks="OAuthプロバイダーのタイプを保持する。" size="5" type="int2" typeCode="5">
+            <parent column="id" foreignKey="account_oauth_provider_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="oauth_provider"/>
+         </column>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="7" name="created_time" nullable="false" remarks="作成日時" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="8" name="updated_time" nullable="false" remarks="更新日時" size="35" type="timestamptz" typeCode="93"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="account_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -24,6 +29,8 @@
          <index name="account_username_key" unique="true">
             <column ascending="true" name="username"/>
          </index>
+         <checkConstraint constraint="(((password)::text &lt;&gt; ''::text))" name="account_password_check"/>
+         <checkConstraint constraint="(((username)::text &lt;&gt; ''::text))" name="account_username_check"/>
       </table>
       <table name="executed_task" numRows="0" remarks="実行済みタスク情報。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="planned_task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
@@ -32,6 +39,7 @@
          <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="started_time" nullable="true" remarks="開始された日時。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="ended_time" nullable="true" remarks="終了された日時。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_achieved" nullable="false" remarks="計画を予定通り実行できたか。true=達成, false=未達成" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_cancelled" nullable="false" remarks="運営がメンテナンス等の不可抗力で取り消しとなった状態を表す。 true=キャンセルされた, false=キャンセルされていない" size="1" type="bool" typeCode="-7"/>
          <primaryKey column="planned_task_id" sequenceNumberInPK="1"/>
          <index name="executed_task_pkey" unique="true">
             <column ascending="true" name="planned_task_id"/>
@@ -51,6 +59,16 @@
       </table>
       <table name="mergin_time" numRows="0" remarks="タスク計画時の支払いが発生しないマージンの時間。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="6" id="0" name="second" nullable="false" remarks="分。" size="49" type="interval" typeCode="1111"/>
+      </table>
+      <table name="oauth_provider" numRows="0" remarks="OAuthプロバイダーを表すテーブルである。サービス開始前に事前に定義される。" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="oauth_providerの識別子を表します。" size="5" type="int2" typeCode="5">
+            <child column="oauth_provider_id" foreignKey="account_oauth_provider_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="types" nullable="false" remarks="GOOGLE、TWITTER等の文字列を表します。" size="2147483647" type="text" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="oauth_provider_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
       </table>
       <table name="payment_job_history" numRows="0" remarks="支払いのジョブ履歴。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="planned_task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
@@ -84,8 +102,20 @@
          <checkConstraint constraint="(((title)::text &lt;&gt; ''::text))" name="planned_task_title_check"/>
       </table>
       <table name="roles" numRows="0" remarks="権限情報。認可に使用する権限。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="role_value" nullable="false" remarks="ロール値。" size="30" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="role_label" nullable="false" remarks="ロール表示名。" size="30" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="role_label" nullable="true" remarks="ロール表示名。" size="30" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="role_value" nullable="true" remarks="ロール値。" size="30" type="varchar" typeCode="12"/>
+      </table>
+      <table name="timezones" numRows="0" remarks="タイムゾーンを表すテーブルである。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="時間帯名" size="2147483647" type="text" typeCode="12">
+            <child column="timezones_name" foreignKey="account_timezones_name_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="abbrev" nullable="false" remarks="時間帯省略形" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="utc_offset" nullable="false" remarks="UTCからのオフセット(正はグリニッジより西側を意味する)" size="49" type="interval" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="is_dst" nullable="false" remarks="現在夏時間である場合に真" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="name" sequenceNumberInPK="1"/>
+         <index name="timezones_pkey" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
       </table>
    </tables>
 </database>

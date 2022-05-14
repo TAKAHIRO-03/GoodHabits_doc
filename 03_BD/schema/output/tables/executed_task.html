@@ -187,6 +187,23 @@
                                     </td>
                                     <td><p>計画を予定通り実行できたか。true=達成, false=未達成</p></td>
                                 </tr>
+                                <tr>
+                                    <td><span id="is_cancelled">is_cancelled</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>false</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>運営がメンテナンス等の不可抗力で取り消しとなった状態を表す。 true=キャンセルされた, false=キャンセルされていない</p></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -240,17 +257,17 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="236,5,553,192">
+<area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="236,5,553,221">
 <area shape="rect" id="node2" href="planned_task.html" target="_top" title="planned_task" alt="" coords="5,8,192,155">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/executed_task.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="427,5,744,192">
-<area shape="rect" id="node2" href="planned_task.html" target="_top" title="planned_task" alt="" coords="196,108,383,255">
-<area shape="rect" id="node4" href="account.html" target="_top" title="account" alt="" coords="5,140,152,228">
-<area shape="rect" id="node3" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="463,209,708,297">
+<area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="427,5,744,221">
+<area shape="rect" id="node2" href="planned_task.html" target="_top" title="planned_task" alt="" coords="196,123,383,269">
+<area shape="rect" id="node4" href="account.html" target="_top" title="account" alt="" coords="5,155,152,243">
+<area shape="rect" id="node3" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="463,239,708,327">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/executed_task.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
