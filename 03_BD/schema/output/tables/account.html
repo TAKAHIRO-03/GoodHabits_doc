@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>アカウント情報。ユーザの登録済みアカウント情報を保持する。</p>
+                            <p>アカウント情報。</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -189,7 +189,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>権限。1アカウントで複数の権限を保有している</p></td>
+                                    <td><p>権限。1アカウントで複数の権限を保有している。</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="is_locked">is_locked</span></td>
@@ -206,7 +206,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>アカウントロックBool値。true=ロックされている。false=ロックされていない</p></td>
+                                    <td><p>アカウントロックBool値。true=ロックされている。false=ロックされていない。</p></td>
                                 </tr>
                                 <tr>
                                     <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="timezones_name">timezones_name</span></td>
@@ -227,7 +227,28 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><p>タイムゾーン</p></td>
+                                    <td><p>タイムゾーン。</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="currency_iso_code">currency_iso_code</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>&#39;JPY&#39;::text</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="account.currency_iso_code references currency.iso_code via account_currency_iso_code_fkey"><a href='currency.html'>currency</a><span class='relatedKey'>.iso_code</span></td>
+                                                <td class="constraint detail">account_currency_iso_code_fkey<span title=''></span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>タスク計画時のお金を払う際の通貨。</p></td>
                                 </tr>
                                 <tr>
                                     <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="oauth_provider_id">oauth_provider_id</span></td>
@@ -248,7 +269,7 @@
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><p>OAuthプロバイダーのタイプを保持する。</p></td>
+                                    <td><p>OAuthプロバイダーのタイプ。</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="created_time">created_time</span></td>
@@ -265,7 +286,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>作成日時</p></td>
+                                    <td><p>作成日時。</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="updated_time">updated_time</span></td>
@@ -282,7 +303,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>更新日時</p></td>
+                                    <td><p>更新日時。</p></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -369,29 +390,57 @@
                                 <ul class="nav nav-tabs pull-left ui-sortable-handle">
                                     <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
                                     <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
+                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
+                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
                                 </ul>
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,88,585,421">
-<area shape="rect" id="node2" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,319,208,436">
-<area shape="rect" id="node3" href="timezones.html" target="_top" title="timezones" alt="" coords="25,184,189,301">
-<area shape="rect" id="node4" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="637,5,809,128">
-<area shape="rect" id="node5" href="planned_task.html" target="_top" title="planned_task" alt="" coords="629,145,816,292">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,87,587,449">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,265,184,412">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,429,208,547">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,131,189,248">
+<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="638,5,810,128">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="631,145,817,292">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/account.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,151,585,484">
-<area shape="rect" id="node2" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,381,208,499">
-<area shape="rect" id="node3" href="timezones.html" target="_top" title="timezones" alt="" coords="25,247,189,364">
-<area shape="rect" id="node4" href="executed_task.html" target="_top" title="executed_task" alt="" coords="885,5,1080,93">
-<area shape="rect" id="node5" href="planned_task.html" target="_top" title="planned_task" alt="" coords="629,56,816,203">
-<area shape="rect" id="node6" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="637,220,809,343">
-<area shape="rect" id="node7" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="860,111,1105,199">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,148,587,511">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,327,184,473">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,491,208,608">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,192,189,309">
+<area shape="rect" id="node5" href="executed_task.html" target="_top" title="executed_task" alt="" coords="887,5,1081,93">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="631,55,817,201">
+<area shape="rect" id="node7" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="638,219,810,341">
+<area shape="rect" id="node8" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="861,111,1107,199">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/account.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="460,87,795,449">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="237,265,392,412">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="213,429,416,547">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="5,243,169,360">
+<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="846,5,1018,128">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="839,145,1025,292">
+</map>
+                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/account.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="460,148,795,511">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="237,327,392,473">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="213,491,416,608">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="5,304,169,421">
+<area shape="rect" id="node5" href="executed_task.html" target="_top" title="executed_task" alt="" coords="1095,5,1289,93">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="839,55,1025,201">
+<area shape="rect" id="node7" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="846,219,1018,341">
+<area shape="rect" id="node8" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="1069,111,1315,199">
+</map>
+                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/account.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
                                     </div>
                                 </div>
                             </div>

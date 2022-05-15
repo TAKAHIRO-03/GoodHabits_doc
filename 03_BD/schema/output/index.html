@@ -78,7 +78,7 @@
                         <div class="col-md-12">
                             <div class="callout callout-info">
                                 <h4>SchemaSpy Analysis of postgres</h4>
-                                <p>Generated on Sat May 14 05:50 GMT 2022</p>
+                                <p>Generated on Sun May 15 02:01 GMT 2022</p>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                                 <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">TABLES</span>
-                                    <span class="info-box-number">9</span>
+                                    <span class="info-box-number">11</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -118,7 +118,7 @@
                                 <span class="info-box-icon bg-green"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">COLUMNS</span>
-                                    <span class="info-box-number">33</span>
+                                    <span class="info-box-number">40</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -130,7 +130,7 @@
                                 <span class="info-box-icon bg-yellow"><i class="ion ion-key"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Constraints</span>
-                                    <span class="info-box-number">6</span>
+                                    <span class="info-box-number">7</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -142,7 +142,7 @@
                                 <span class="info-box-icon bg-red-active"><i class="fa fa-question" aria-hidden="true"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Anomalies</span>
-                                    <span class="info-box-number">3</span>
+                                    <span class="info-box-number">5</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -200,13 +200,22 @@
                                 </thead>
                                 <tbody>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/account.html">account</a></td>
-                                        <td class="detail" align="right">2</td>
-                                        <td class="detail" align="right">2</td>
-                                        <td class="detail" align="right">9</td>
+                                        <td class="detail"><a href="tables/currency.html">currency</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>アカウント情報。ユーザの登録済みアカウント情報を保持する。</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>通貨。サービス開始前に定義される。</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/account.html">account</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>アカウント情報。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/payment_job_history.html">payment_job_history</a></td>
@@ -227,6 +236,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>権限情報。認可に使用する権限。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/failed_auth.html">failed_auth</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報。</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/executed_task.html">executed_task</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">1</td>
@@ -236,31 +254,22 @@
                                         <td class="comment detail" style="display: table-cell;"><p>実行済みタスク情報。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/failed_auth.html">failed_auth</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">1</td>
-                                        <td class="detail" align="right">2</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/oauth_provider.html">oauth_provider</a></td>
                                         <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>OAuthプロバイダーを表すテーブルである。サービス開始前に事前に定義される。</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>OAuthプロバイダー。サービス開始前に定義される。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/timezones.html">timezones</a></td>
-                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>タイムゾーンを表すテーブルである。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/planned_task.html">planned_task</a></td>
@@ -279,6 +288,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>タスク計画時の支払いが発生しないマージンの時間。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/maintenance_plan.html">maintenance_plan</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>運営のメンテナンス計画。</p></td>
                                     </tr>
                             </table>
                         </div>

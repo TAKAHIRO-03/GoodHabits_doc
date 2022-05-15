@@ -227,7 +227,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>金額</p></td>
+                                    <td><p>金額。</p></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -290,12 +290,12 @@
                                     <td>(((CURRENT_TIMESTAMP &lt;= end_time) AND (start_time &lt; end_time)))</td>
                                 </tr>
                                 <tr>
-                                    <td>planned_task_title_check</td>
-                                    <td>(((title)::text &lt;&gt; &#39;&#39;::text))</td>
-                                </tr>
-                                <tr>
                                     <td>planned_task_cost_check</td>
                                     <td>((0.0 &lt; cost))</td>
+                                </tr>
+                                <tr>
+                                    <td>planned_task_title_check</td>
+                                    <td>(((title)::text &lt;&gt; &#39;&#39;::text))</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -320,22 +320,23 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="607,5,801,123">
-<area shape="rect" id="node2" href="planned_task.html" target="_top" title="planned_task" alt="" coords="241,71,537,316">
-<area shape="rect" id="node4" href="account.html" target="_top" title="account" alt="" coords="5,103,197,308">
-<area shape="rect" id="node3" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="581,140,827,257">
+<area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="608,5,803,123">
+<area shape="rect" id="node2" href="planned_task.html" target="_top" title="planned_task" alt="" coords="243,71,539,316">
+<area shape="rect" id="node4" href="account.html" target="_top" title="account" alt="" coords="5,103,199,337">
+<area shape="rect" id="node3" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="583,140,828,257">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/planned_task.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,217,444,423">
-<area shape="rect" id="node2" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,345,208,433">
-<area shape="rect" id="node3" href="timezones.html" target="_top" title="timezones" alt="" coords="25,240,189,328">
-<area shape="rect" id="node4" href="executed_task.html" target="_top" title="executed_task" alt="" coords="853,5,1048,123">
-<area shape="rect" id="node5" href="planned_task.html" target="_top" title="planned_task" alt="" coords="488,71,784,316">
-<area shape="rect" id="node6" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="550,333,722,421">
-<area shape="rect" id="node7" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="828,140,1073,257">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,217,445,452">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,308,184,396">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,413,208,501">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,203,189,291">
+<area shape="rect" id="node5" href="executed_task.html" target="_top" title="executed_task" alt="" coords="855,5,1049,123">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="489,71,785,316">
+<area shape="rect" id="node7" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="551,333,723,421">
+<area shape="rect" id="node8" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="829,140,1075,257">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/planned_task.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

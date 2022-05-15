@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>タイムゾーンを表すテーブルである。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。</p>
+                            <p>タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -127,6 +127,10 @@
                                             <tr>
                                                 <td title="account.timezones_name references timezones.name via account_timezones_name_fkey"><a href='account.html'>account</a><span class='relatedKey'>.timezones_name</span></td>
                                                 <td class="constraint detail">account_timezones_name_fkey<span title=''></span></td>
+                                            </tr>
+                                            <tr>
+                                                <td title="currency.name&#39;s name implies that it&#39;s a child of timezones.name, but it doesn&#39;t reference that column."><a href='currency.html'>currency</a><span class='relatedKey'>.name</span></td>
+                                                <td class="constraint detail">Implied Constraint<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -236,24 +240,46 @@
                                 <ul class="nav nav-tabs pull-left ui-sortable-handle">
                                     <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
                                     <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
+                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
+                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
                                 </ul>
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="320,5,512,211">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="320,5,513,240">
 <area shape="rect" id="node2" href="timezones.html" target="_top" title="timezones" alt="" coords="5,61,276,248">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/timezones.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="320,55,512,260">
-<area shape="rect" id="node2" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="39,229,242,317">
-<area shape="rect" id="node3" href="timezones.html" target="_top" title="timezones" alt="" coords="5,25,276,212">
-<area shape="rect" id="node4" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="563,5,735,93">
-<area shape="rect" id="node5" href="planned_task.html" target="_top" title="planned_task" alt="" coords="556,111,743,199">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="320,119,513,353">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="63,209,218,297">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="39,315,242,403">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="5,5,276,192">
+<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="565,69,737,157">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="557,175,744,263">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/timezones.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="519,5,712,240">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="320,116,475,263">
+<area shape="rect" id="node3" href="timezones.html" target="_top" title="timezones" alt="" coords="5,91,276,277">
+</map>
+                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/timezones.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="567,55,760,289">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="344,143,499,289">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="320,307,523,395">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="5,117,276,304">
+<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="811,5,983,93">
+<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="804,111,991,199">
+</map>
+                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/timezones.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
                                     </div>
                                 </div>
                             </div>

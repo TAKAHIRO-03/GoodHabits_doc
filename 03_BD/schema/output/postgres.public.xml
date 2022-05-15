@@ -5,23 +5,26 @@
       <sequence increment="1" name="planned_task_id_seq" startValue="1"/>
    </sequences>
    <tables>
-      <table name="account" numRows="0" remarks="アカウント情報。ユーザの登録済みアカウント情報を保持する。" schema="public" type="TABLE">
+      <table name="account" numRows="0" remarks="アカウント情報。" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('account_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="アカウントID。" size="19" type="bigserial" typeCode="-5">
             <child column="account_id" foreignKey="failed_auth_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="failed_auth"/>
             <child column="account_id" foreignKey="planned_task_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="planned_task"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="username" nullable="false" remarks="ユーザー名。メールアドレスの形式で保持する。ログインIDとしても使用される。" size="256" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="password" nullable="true" remarks="パスワード。ハッシュ化された状態で保持する。" size="60" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="roles" nullable="false" remarks="権限。1アカウントで複数の権限を保有している" size="30" type="_varchar" typeCode="2003"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="is_locked" nullable="false" remarks="アカウントロックBool値。true=ロックされている。false=ロックされていない" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="'Asia/Tokyo'::text" digits="0" id="5" name="timezones_name" nullable="false" remarks="タイムゾーン" size="2147483647" type="text" typeCode="12">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="roles" nullable="false" remarks="権限。1アカウントで複数の権限を保有している。" size="30" type="_varchar" typeCode="2003"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="is_locked" nullable="false" remarks="アカウントロックBool値。true=ロックされている。false=ロックされていない。" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="'Asia/Tokyo'::text" digits="0" id="5" name="timezones_name" nullable="false" remarks="タイムゾーン。" size="2147483647" type="text" typeCode="12">
             <parent column="name" foreignKey="account_timezones_name_fkey" implied="false" onDeleteCascade="false" schema="public" table="timezones"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="oauth_provider_id" nullable="true" remarks="OAuthプロバイダーのタイプを保持する。" size="5" type="int2" typeCode="5">
+         <column autoUpdated="false" defaultValue="'JPY'::text" digits="0" id="6" name="currency_iso_code" nullable="false" remarks="タスク計画時のお金を払う際の通貨。" size="2147483647" type="text" typeCode="12">
+            <parent column="iso_code" foreignKey="account_currency_iso_code_fkey" implied="false" onDeleteCascade="false" schema="public" table="currency"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="oauth_provider_id" nullable="true" remarks="OAuthプロバイダーのタイプ。" size="5" type="int2" typeCode="5">
             <parent column="id" foreignKey="account_oauth_provider_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="oauth_provider"/>
          </column>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="7" name="created_time" nullable="false" remarks="作成日時" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="8" name="updated_time" nullable="false" remarks="更新日時" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="8" name="created_time" nullable="false" remarks="作成日時。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="9" name="updated_time" nullable="false" remarks="更新日時。" size="35" type="timestamptz" typeCode="93"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="account_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -32,24 +35,38 @@
          <checkConstraint constraint="(((password)::text &lt;&gt; ''::text))" name="account_password_check"/>
          <checkConstraint constraint="(((username)::text &lt;&gt; ''::text))" name="account_username_check"/>
       </table>
+      <table name="currency" numRows="0" remarks="通貨。サービス開始前に定義される。" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="iso_code" nullable="false" remarks="ISOコード 例）JPY" size="2147483647" type="text" typeCode="12">
+            <child column="currency_iso_code" foreignKey="account_currency_iso_code_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="country" nullable="false" remarks="国名 例）日本" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="sign" nullable="false" remarks="通貨記号 例）￥" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="通貨名 例）円" size="2147483647" type="text" typeCode="12">
+            <parent column="name" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="timezones"/>
+         </column>
+         <primaryKey column="iso_code" sequenceNumberInPK="1"/>
+         <index name="currency_pkey" unique="true">
+            <column ascending="true" name="iso_code"/>
+         </index>
+      </table>
       <table name="executed_task" numRows="0" remarks="実行済みタスク情報。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="planned_task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
             <parent column="id" foreignKey="executed_task_planned_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="planned_task"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="started_time" nullable="true" remarks="開始された日時。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="ended_time" nullable="true" remarks="終了された日時。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_achieved" nullable="false" remarks="計画を予定通り実行できたか。true=達成, false=未達成" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_cancelled" nullable="false" remarks="運営がメンテナンス等の不可抗力で取り消しとなった状態を表す。 true=キャンセルされた, false=キャンセルされていない" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="started_time" nullable="true" remarks="開始された日時。NULL=開始されていない。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="ended_time" nullable="true" remarks="終了された日時。NULL=終了していない。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_achieved" nullable="false" remarks="計画を予定通り実行できたか。true=達成, false=未達成。" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_cancelled" nullable="false" remarks="運営がメンテナンス等の不可抗力で取り消しとなった状態を表す。 true=キャンセルされた, false=キャンセルされていない。" size="1" type="bool" typeCode="-7"/>
          <primaryKey column="planned_task_id" sequenceNumberInPK="1"/>
          <index name="executed_task_pkey" unique="true">
             <column ascending="true" name="planned_task_id"/>
          </index>
       </table>
-      <table name="failed_auth" numRows="0" remarks="認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報" schema="public" type="TABLE">
+      <table name="failed_auth" numRows="0" remarks="認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="account_id" nullable="false" remarks="アカウントID。" size="19" type="int8" typeCode="-5">
             <parent column="id" foreignKey="failed_auth_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="account"/>
          </column>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="1" name="auth_ts" nullable="false" remarks="認証失敗時のタイムスタンプ" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="1" name="auth_ts" nullable="false" remarks="認証失敗時の時間。" size="35" type="timestamptz" typeCode="93"/>
          <primaryKey column="account_id" sequenceNumberInPK="1"/>
          <primaryKey column="auth_ts" sequenceNumberInPK="2"/>
          <index name="failed_auth_pkey" unique="true">
@@ -57,10 +74,14 @@
             <column ascending="true" name="auth_ts"/>
          </index>
       </table>
+      <table name="maintenance_plan" numRows="0" remarks="運営のメンテナンス計画。" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="6" id="0" name="start_time" nullable="false" remarks="メンテナンス開始時間" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="end_time" nullable="false" remarks="メンテナンス終了時間" size="35" type="timestamptz" typeCode="93"/>
+      </table>
       <table name="mergin_time" numRows="0" remarks="タスク計画時の支払いが発生しないマージンの時間。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="6" id="0" name="second" nullable="false" remarks="分。" size="49" type="interval" typeCode="1111"/>
       </table>
-      <table name="oauth_provider" numRows="0" remarks="OAuthプロバイダーを表すテーブルである。サービス開始前に事前に定義される。" schema="public" type="TABLE">
+      <table name="oauth_provider" numRows="0" remarks="OAuthプロバイダー。サービス開始前に定義される。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="oauth_providerの識別子を表します。" size="5" type="int2" typeCode="5">
             <child column="oauth_provider_id" foreignKey="account_oauth_provider_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
          </column>
@@ -91,7 +112,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="title" nullable="false" remarks="タイトル。" size="100" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="start_time" nullable="false" remarks="開始日時。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="end_time" nullable="false" remarks="終了日時。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="cost" nullable="false" remarks="金額" size="131089" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="cost" nullable="false" remarks="金額。" size="131089" type="numeric" typeCode="2"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="planned_task_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -105,9 +126,10 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="role_label" nullable="true" remarks="ロール表示名。" size="30" type="varchar" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="role_value" nullable="true" remarks="ロール値。" size="30" type="varchar" typeCode="12"/>
       </table>
-      <table name="timezones" numRows="0" remarks="タイムゾーンを表すテーブルである。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。" schema="public" type="TABLE">
+      <table name="timezones" numRows="0" remarks="タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="時間帯名" size="2147483647" type="text" typeCode="12">
             <child column="timezones_name" foreignKey="account_timezones_name_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
+            <child column="name" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="currency"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="abbrev" nullable="false" remarks="時間帯省略形" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="utc_offset" nullable="false" remarks="UTCからのオフセット(正はグリニッジより西側を意味する)" size="49" type="interval" typeCode="1111"/>
