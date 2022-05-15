@@ -1,0 +1,106 @@
+@startuml ログイン
+title ログイン
+
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+participant Google
+!pragma teoz true
+
+== GoodHabitsログイン ==
+autonumber "[000]"
+
+User -> Browser: 起動
+User -> Browser: /loginリクエスト()
+Browser -> WebServer: /login 静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> Browser: レンダリング()
+
+User -> Browser: ログインボタン押下(ログインID, パスワード)
+alt 不正なパラメーターの場合
+  Browser --> Browser: エラー応答()
+end
+
+Browser -> AppServer: /api/v1.0/login (ログインID, パスワード)
+alt 不正なパラメーターの場合
+  AppServer --> Browser: 応答(401,エラーメッセージ)
+end
+
+AppServer -> RDB: アカウント情報とログイン試行回数取得\n(ログインID)
+RDB --> AppServer: 応答\n(アカウント情報, ログイン試行回数)
+
+alt アカウント情報が存在しない時
+  AppServer --> Browser: 応答\n(401,エラーメッセージ)
+end
+
+alt ログイン試行回数が6回以上かつ\n最後のログインから30分以内の時
+  AppServer --> Browser: 応答\n(401,エラーメッセージ)
+end
+
+AppServer -> AppServer: アカウント情報の検証\n(アカウント情報)
+alt IDまたはパスワードが間違っている場合
+  AppServer --> Browser: 応答(401,エラーメッセージ)
+end
+
+AppServer -> AppServer: アクセストークンとリフレッシュトークン発行()
+AppServer -> NoSQL: アクセストークン登録\n(アクセストークン)
+NoSQL --> AppServer: 応答()
+AppServer -> NoSQL: リフレッシュトークン登録\n(UUID, アクセストークン)
+NoSQL --> AppServer: 応答()
+
+AppServer -> Browser: 応答\n(アクセストークン, リフレッシュトークン)
+Browser -> Browser: 応答データをローカルストレージに保存\n(アクセストークン, リフレッシュトークン)
+
+Browser -> Browser: /plan リダイレクト
+
+== Googleログイン ==
+autonumber "[000]"
+
+User -> Browser: 起動
+User -> Browser: /loginリクエスト()
+Browser -> WebServer: /login 静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> Browser: レンダリング()
+
+User -> Browser: Googleログイン押下()
+Browser -> AppServer: URL要求()
+AppServer --> Browser: URL返却\n(GoogleログインURL, 302)
+
+Browser -> Google: リダイレクト()
+Google --> Browser: 静的ページ返却()
+Browser -> Browser: レンダリング()
+
+User -> Browser: Googleログインボタン押下\n(メールアドレス, パスワード)
+Browser -> Google: ログイン情報送信(メールアドレス, パスワード)
+Google --> Browser: 応答(コード)
+Browser -> AppServer: ログイン情報送信(コード)
+
+AppServer -> Google: アカウント情報取得要求\n(コード, ApiKey)
+Google --> AppServer: 応答(トークン)
+
+AppServer -> Google: アカウント情報取得(トークン)
+Google --> AppServer: 応答(アカウント情報)
+
+AppServer -> RDB: アカウント情報取得(メールアドレス)
+RDB --> AppServer: 応答(アカウント情報)
+
+alt アカウント情報が存在しない場合
+  AppServer -> RDB: アカウント情報登録(メールアドレス)
+  RDB --> AppServer: 応答()
+end
+
+AppServer -> AppServer: アクセストークンとリフレッシュトークン発行()
+AppServer -> NoSQL: アクセストークン登録\n(アクセストークン, アカウント情報)
+NoSQL --> AppServer: 応答()
+AppServer -> NoSQL: リフレッシュトークン登録\n(リフレッシュトークン, アカウント情報)
+NoSQL --> AppServer: 応答()
+
+AppServer -> Browser: 応答\n(アクセストークン, リフレッシュトークン)
+Browser -> Browser: 応答データをローカルストレージに保存\n(アクセストークン, リフレッシュトークン)
+
+Browser -> Browser: /plan リダイレクト
