@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  client:
+    image: goodhabits/client:latest
+    container_name: client-ctr
+    environment:
+      - NODE_ENV=development
+    ports:
+      - '8888:8888'
+    volumes:
+      - ../../GoodHabitsClient:/root/GoodHabitsClient
+    command: sh -c "npm install && npm run dev"
+    tty: true
+  server:
+    image: goodhabits/server:latest
+    depends_on:
+      - db
+    container_name: server-ctr
+    ports:
+      - '8080:8080'
+  db:
+    image: postgres:13.6
+    container_name: db-ctr
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
+      - DATABASE_HOST=localhost
+    ports:
+      - "4325:5432"
