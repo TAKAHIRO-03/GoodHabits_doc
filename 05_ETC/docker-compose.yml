@@ -15,17 +15,41 @@ services:
   server:
     image: goodhabits/server:latest
     depends_on:
-      - db
+      - rdb
+      - nosql
     container_name: server-ctr
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000
     ports:
       - '8080:8080'
-  db:
+      - '8000:8000'
+  rdb:
     image: postgres:13.6
-    container_name: db-ctr
+    container_name: rdb-ctr
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - PGPASSWORD=postgres
       - DATABASE_HOST=localhost
     ports:
-      - "4325:5432"
+      - "5432:5432"
+  nosql:
+      image: "redis:latest"
+      container_name: nosql-ctr
+      ports:
+        - "6379:6379"
+  dd-agent:
+      image: gcr.io/datadoghq/agent:7
+      container_name: datadog-ctr
+      environment:
+        - DD_API_KEY=${DD_API_KEY}
+        - DD_SITE=datadoghq.com
+        - DD_LOGS_ENABLED=true
+        - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+        - DD_AC_EXCLUDE=image:gcr.io/datadoghq/agent
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - /proc/:/host/proc/:ro
+        - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+        - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
