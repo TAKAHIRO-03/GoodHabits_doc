@@ -12,11 +12,27 @@ EOM
   exit 2
 }
 
+function server_build {
+
+  # readonly server_path="//c//workspace//GoodHabits//GoodHabitsServer"
+  readonly home_path="//c//Users/$(whoami)"
+
+  # docker run -it --rm --name my-maven-project \
+  #   -v "$server_path:/usr/src/mymaven" \
+  #   -v "$home_path/.m2":/root/.m2 \
+  #   -v "$server_path/target:/usr/src/mymaven/target" \
+  #   -w //usr/src/mymaven maven:3.8.5-amazoncorretto-17 mvn clean package
+
+  docker build -t goodhabits/server:latest "../../GoodHabitsServer"
+  echo y | docker image prune # noneなイメージ削除
+}
+
 while getopts "sbdrh" optKey; do
   case "$optKey" in
     b)
       docker build -t goodhabits/client:latest ../../GoodHabitsClient
-      cd ../../GoodHabitsServer && ./mvnw compile jib:dockerBuild && cd "$PWD"
+      # cd ../../GoodHabitsServer && ./mvnw compile jib:dockerBuild && cd "$PWD" #Jibを使ったイメージビルド
+      server_build
       echo "Builded containers."
       exit 0
       ;;
