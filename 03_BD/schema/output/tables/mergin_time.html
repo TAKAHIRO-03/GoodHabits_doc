@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>タスク計画時の支払いが発生しないマージンの時間。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。</p>
+                            <p>マージンの時間。単位は分。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -116,7 +116,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><span id="second">second</span></td>
+                                    <td><span id="planned_mergin">planned_mergin</span></td>
                                     <td>interval</td>
                                     <td>49,6</td>
                                     <td title=''></td>
@@ -130,7 +130,24 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>分。</p></td>
+                                    <td><p>計画済みタスクの実行完了を範囲となる時間。</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="cancel_mergin">cancel_mergin</span></td>
+                                    <td>interval</td>
+                                    <td>49,6</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>キャンセルすることが出来る時間。</p></td>
                                 </tr>
                                 </tbody>
                             </table>

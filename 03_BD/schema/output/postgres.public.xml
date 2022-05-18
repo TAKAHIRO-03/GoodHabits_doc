@@ -78,8 +78,9 @@
          <column autoUpdated="false" defaultValue="null" digits="6" id="0" name="start_time" nullable="false" remarks="メンテナンス開始時間" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="end_time" nullable="false" remarks="メンテナンス終了時間" size="35" type="timestamptz" typeCode="93"/>
       </table>
-      <table name="mergin_time" numRows="0" remarks="タスク計画時の支払いが発生しないマージンの時間。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="6" id="0" name="second" nullable="false" remarks="分。" size="49" type="interval" typeCode="1111"/>
+      <table name="mergin_time" numRows="0" remarks="マージンの時間。単位は分。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="6" id="0" name="planned_mergin" nullable="false" remarks="計画済みタスクの実行完了を範囲となる時間。" size="49" type="interval" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="cancel_mergin" nullable="false" remarks="キャンセルすることが出来る時間。" size="49" type="interval" typeCode="1111"/>
       </table>
       <table name="oauth_provider" numRows="0" remarks="OAuthプロバイダー。サービス開始前に定義される。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="oauth_providerの識別子を表します。" size="5" type="int2" typeCode="5">

@@ -223,11 +223,16 @@ COMMENT ON COLUMN public.payment_job_history.planned_task_id IS '計画済みタ
 
 COMMENT ON COLUMN public.payment_job_history.executed_time IS 'ジョブが実行された日時。';
 
-CREATE TABLE IF NOT EXISTS public.mergin_time (second INTERVAL NOT NULL);
+CREATE TABLE IF NOT EXISTS public.mergin_time (
+  planned_mergin INTERVAL NOT NULL,
+  cancel_mergin INTERVAL NOT NULL
+);
 
-COMMENT ON TABLE public.mergin_time IS 'タスク計画時の支払いが発生しないマージンの時間。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。';
+COMMENT ON TABLE public.mergin_time IS 'マージンの時間。単位は分。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。';
 
-COMMENT ON COLUMN public.mergin_time.second IS '分。';
+COMMENT ON COLUMN public.mergin_time.planned_mergin IS '計画済みタスクの実行完了を範囲となる時間。';
+
+COMMENT ON COLUMN public.mergin_time.cancel_mergin IS 'キャンセルすることが出来る時間。';
 
 ALTER TABLE
   public.mergin_time OWNER TO ghuser;
