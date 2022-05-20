@@ -2,10 +2,10 @@ timezones
 oauth_provider
 currency
 account
-planned_task
-executed_task
+planned_habit
+executed_habit
 failed_auth
 payment_job_history
 maintenance_plan
-mergin_time
+margin_time
 roles

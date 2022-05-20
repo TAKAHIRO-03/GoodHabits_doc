@@ -78,7 +78,7 @@
                         <div class="col-md-12">
                             <div class="callout callout-info">
                                 <h4>SchemaSpy Analysis of postgres</h4>
-                                <p>Generated on Wed May 18 13:24 GMT 2022</p>
+                                <p>Generated on Fri May 20 13:24 GMT 2022</p>
                             </div>
                         </div>
                     </div>
@@ -245,15 +245,6 @@
                                         <td class="comment detail" style="display: table-cell;"><p>認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/executed_task.html">executed_task</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">1</td>
-                                        <td class="detail" align="right">5</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>実行済みタスク情報。</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/oauth_provider.html">oauth_provider</a></td>
                                         <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
@@ -272,22 +263,22 @@
                                         <td class="comment detail" style="display: table-cell;"><p>タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/planned_task.html">planned_task</a></td>
+                                        <td class="detail"><a href="tables/executed_habit.html">executed_habit</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>実行済み習慣情報。</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/planned_habit.html">planned_habit</a></td>
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>計画済みタスク情報。</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/mergin_time.html">mergin_time</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">2</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>マージンの時間。単位は分。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>計画済み習慣情報。</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/maintenance_plan.html">maintenance_plan</a></td>
@@ -297,6 +288,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>運営のメンテナンス計画。</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/margin_time.html">margin_time</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>マージンの時間。単位は分。例）計画済み習慣±5分が実行完了とするの時間。この±5分を表す。</p></td>
                                     </tr>
                             </table>
                         </div>

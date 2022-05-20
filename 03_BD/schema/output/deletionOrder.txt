@@ -1,10 +1,10 @@
 roles
-mergin_time
+margin_time
 maintenance_plan
 payment_job_history
 failed_auth
-executed_task
-planned_task
+executed_habit
+planned_habit
 account
 currency
 oauth_provider

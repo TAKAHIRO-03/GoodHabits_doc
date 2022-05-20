@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>failed_auth - postgres Database</title>
+        <title>margin_time - postgres Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>failed_auth</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>margin_time</h1><p><span id="recordNumber">0</span> rows</p><br />
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報。</p>
+                            <p>マージンの時間。単位は分。例）計画済み習慣±5分が実行完了とするの時間。この±5分を表す。</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -116,9 +116,9 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="account_id">account_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
+                                    <td><span id="completed_margin">completed_margin</span></td>
+                                    <td>interval</td>
+                                    <td>49,6</td>
                                     <td title=''></td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -128,21 +128,17 @@
                                     </td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="failed_auth.account_id references account.id via failed_auth_account_id_fkey"><a href='account.html'>account</a><span class='relatedKey'>.id</span></td>
-                                                <td class="constraint detail">failed_auth_account_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
-                                            </tr>
                                         </table>
                                     </td>
-                                    <td><p>アカウントID。</p></td>
+                                    <td><p>計画済み習慣の実行完了となる時間。</p></td>
                                 </tr>
                                 <tr>
-                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="auth_ts">auth_ts</span></td>
-                                    <td>timestamptz</td>
-                                    <td>35,6</td>
+                                    <td><span id="cancel_margin">cancel_margin</span></td>
+                                    <td>interval</td>
+                                    <td>49,6</td>
                                     <td title=''></td>
                                     <td title=''></td>
-                                    <td>CURRENT_TIMESTAMP</td>
+                                    <td>null</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
@@ -151,80 +147,16 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>認証失敗時の時間。</p></td>
+                                    <td><p>キャンセルすることが出来る時間。</p></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-sitemap"></i>
-                            <h3 id="Indexes" class="box-title">Indexes</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <table id="indexes_table" class="table table-bordered table-striped dataTable" role="grid">
-                                <thead>
-                                <tr>
-                                    <th>Constraint Name</th>
-                                    <th>Type</th>
-                                    <th>Sort</th>
-                                    <th>Column(s)</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> failed_auth_pkey</td>
-                                    <td>Primary key</td>
-                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-                                    <td>account_id + auth_ts</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div><!-- /.box-body -->
-                    </div>
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-code-fork"></i>
-                            <h3 id="Relationships" class="box-title">Relationships</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <div class="nav-tabs-custom"><!-- Tabs within a box -->
-                                <h5>Close relationships within degrees of separation</h5>
-                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
-                                    <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
-                                    <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
-                                </ul>
-                                <div class="tab-content no-padding">
-                                    <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
-                                        <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="243,5,523,133">
-<area shape="rect" id="node2" href="account.html" target="_top" title="account" alt="" coords="5,8,199,243">
-</map>
-                                        <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/failed_auth.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
-                                    </div>
-                                    <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
-                                        <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,77,445,312">
-<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,168,184,256">
-<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,273,208,361">
-<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,63,189,151">
-<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="489,5,769,133">
-<area shape="rect" id="node6" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="531,151,727,239">
-</map>
-                                        <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/failed_auth.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- /.box-body -->
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-warning"></i>Diagram producer might be missing</h4>
+                        <p>No diagrams were produced please see application output for any errors</p>
                     </div>
                 </section>
                 <script>

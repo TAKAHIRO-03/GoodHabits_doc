@@ -152,18 +152,18 @@
                                         <td><span title=''></span></td>
                                     </tr>
                                     <tr>
-                                        <td>payment_job_history_planned_task_id_fkey</td>
+                                        <td>payment_job_history_planned_habit_id_fkey</td>
                                         <td>
                                             <table border='0' cellspacing='0' cellpadding='0'>
                                                 <tr>
-                                                    <td><a href='tables/payment_job_history.html'>payment_job_history</a><span>.planned_task_id</span></td>
+                                                    <td><a href='tables/payment_job_history.html'>payment_job_history</a><span>.planned_habit_id</span></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table border='0' cellspacing='0' cellpadding='0'>
                                                 <tr>
-                                                    <td><a href='tables/planned_task.html'>planned_task</a><span>.id</span></td>
+                                                    <td><a href='tables/planned_habit.html'>planned_habit</a><span>.id</span></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -188,29 +188,29 @@
                                         <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
                                     </tr>
                                     <tr>
-                                        <td>executed_task_planned_task_id_fkey</td>
+                                        <td>executed_habit_planned_habit_id_fkey</td>
                                         <td>
                                             <table border='0' cellspacing='0' cellpadding='0'>
                                                 <tr>
-                                                    <td><a href='tables/executed_task.html'>executed_task</a><span>.planned_task_id</span></td>
+                                                    <td><a href='tables/executed_habit.html'>executed_habit</a><span>.planned_habit_id</span></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td>
                                             <table border='0' cellspacing='0' cellpadding='0'>
                                                 <tr>
-                                                    <td><a href='tables/planned_task.html'>planned_task</a><span>.id</span></td>
+                                                    <td><a href='tables/planned_habit.html'>planned_habit</a><span>.id</span></td>
                                                 </tr>
                                             </table>
                                         </td>
                                         <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
                                     </tr>
                                     <tr>
-                                        <td>planned_task_account_id_fkey</td>
+                                        <td>planned_habit_account_id_fkey</td>
                                         <td>
                                             <table border='0' cellspacing='0' cellpadding='0'>
                                                 <tr>
-                                                    <td><a href='tables/planned_task.html'>planned_task</a><span>.account_id</span></td>
+                                                    <td><a href='tables/planned_habit.html'>planned_habit</a><span>.account_id</span></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -257,23 +257,23 @@
                                         <td>(((username)::text &lt;&gt; &#39;&#39;::text))</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='tables/planned_task.html'>planned_task</a></td>
-                                        <td>planned_task_check</td>
+                                        <td><a href='tables/planned_habit.html'>planned_habit</a></td>
+                                        <td>planned_habit_check</td>
                                         <td>(((CURRENT_TIMESTAMP &lt;= start_time) AND (start_time &lt; end_time)))</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='tables/planned_task.html'>planned_task</a></td>
-                                        <td>planned_task_check1</td>
+                                        <td><a href='tables/planned_habit.html'>planned_habit</a></td>
+                                        <td>planned_habit_check1</td>
                                         <td>(((CURRENT_TIMESTAMP &lt;= end_time) AND (start_time &lt; end_time)))</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='tables/planned_task.html'>planned_task</a></td>
-                                        <td>planned_task_cost_check</td>
+                                        <td><a href='tables/planned_habit.html'>planned_habit</a></td>
+                                        <td>planned_habit_cost_check</td>
                                         <td>((0.0 &lt; cost))</td>
                                     </tr>
                                     <tr>
-                                        <td><a href='tables/planned_task.html'>planned_task</a></td>
-                                        <td>planned_task_title_check</td>
+                                        <td><a href='tables/planned_habit.html'>planned_habit</a></td>
+                                        <td>planned_habit_title_check</td>
                                         <td>(((title)::text &lt;&gt; &#39;&#39;::text))</td>
                                     </tr>
                                 </tbody>
