@@ -282,20 +282,20 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>planned_habit_check1</td>
-                                    <td>(((CURRENT_TIMESTAMP &lt;= end_time) AND (start_time &lt; end_time)))</td>
-                                </tr>
-                                <tr>
-                                    <td>planned_habit_cost_check</td>
-                                    <td>((0.0 &lt; cost))</td>
-                                </tr>
-                                <tr>
                                     <td>planned_habit_check</td>
                                     <td>(((CURRENT_TIMESTAMP &lt;= start_time) AND (start_time &lt; end_time)))</td>
                                 </tr>
                                 <tr>
                                     <td>planned_habit_title_check</td>
                                     <td>(((title)::text &lt;&gt; &#39;&#39;::text))</td>
+                                </tr>
+                                <tr>
+                                    <td>planned_habit_cost_check</td>
+                                    <td>((0.0 &lt; cost))</td>
+                                </tr>
+                                <tr>
+                                    <td>planned_habit_check1</td>
+                                    <td>(((CURRENT_TIMESTAMP &lt;= end_time) AND (start_time &lt; end_time)))</td>
                                 </tr>
                                 </tbody>
                             </table>

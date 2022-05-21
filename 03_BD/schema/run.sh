@@ -12,3 +12,5 @@ schemaspy_ctr_id=$(docker ps -a | grep schemaspy | awk '{print $1}')
 docker rm -v -f "$schemaspy_ctr_id"
 
 docker-compose down -v
+
+cat ./sql/init.sql > ../../../GoodHabitsServer/src/main/resources/db/migration/local/V1_0__create_table.sql

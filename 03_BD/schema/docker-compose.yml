@@ -12,4 +12,5 @@ services:
       - PGPASSWORD=postgres
       - DATABASE_HOST=localhost
     volumes:
-      - $PWD/sql:/docker-entrypoint-initdb.d
+      - $PWD/init:/docker-entrypoint-initdb.d
+      - $PWD/sql:/sql

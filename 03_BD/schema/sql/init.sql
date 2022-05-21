@@ -1,5 +1,3 @@
-DROP USER IF EXISTS ghuser;
-
 DROP TABLE IF EXISTS public.account;
 
 DROP TABLE IF EXISTS public.oauth_provider;
@@ -21,10 +19,6 @@ DROP TABLE IF EXISTS public.executed_habit;
 DROP TABLE IF EXISTS public.margin_time;
 
 DROP TABLE IF EXISTS public.maintenance_plan;
-
-CREATE ROLE ghuser WITH LOGIN SUPERUSER CREATEDB CREATEROLE INHERIT NOREPLICATION CONNECTION
-LIMIT
-  -1 PASSWORD 'ghpass';
 
 CREATE TABLE IF NOT EXISTS public.oauth_provider (id SMALLINT PRIMARY KEY, types TEXT NOT NULL);
 
@@ -125,6 +119,7 @@ ALTER TABLE
   public.account OWNER TO ghuser;
 
 CREATE TABLE IF NOT EXISTS public.roles (
+  id SMALLINT PRIMARY KEY,
   role_label VARCHAR(30),
   role_value VARCHAR(30)
 );
@@ -224,6 +219,7 @@ COMMENT ON COLUMN public.payment_job_history.planned_habit_id IS '計画済み�
 COMMENT ON COLUMN public.payment_job_history.executed_time IS 'ジョブが実行された日時。';
 
 CREATE TABLE IF NOT EXISTS public.margin_time (
+  id SMALLINT PRIMARY KEY,
   completed_margin INTERVAL NOT NULL,
   cancel_margin INTERVAL NOT NULL
 );
@@ -238,6 +234,7 @@ ALTER TABLE
   public.margin_time OWNER TO ghuser;
 
 CREATE TABLE IF NOT EXISTS public.maintenance_plan (
+  id SMALLSERIAL PRIMARY KEY,
   start_time TIMESTAMPTZ NOT NULL,
   end_time TIMESTAMPTZ NOT NULL
 );
