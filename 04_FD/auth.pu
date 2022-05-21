@@ -1,0 +1,56 @@
+@startuml 認証・認可
+title 認証・認可
+
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+participant Google
+!pragma teoz true
+
+autonumber "[000]"
+Browser -> AppServer: /api/vX.X/hogehoge\n認証が必要なRESTAPI
+note right of Browser
+  リクエストヘッダーに
+  JWTを指定する。
+end note
+alt JWTが存在しない場合
+  AppServer --> Browser: 応答(401, エラーメッセージ)
+end
+AppServer -> NoSQL: JWT確認(JWT)
+NoSQL --> AppServer: 応答()
+alt JWTが存在しない場合
+  AppServer --> Browser: 応答(401, エラーメッセージ)
+end
+
+AppServer -> AppServer: JWT有効期限・改竄・権限確認(JWT)
+alt JWTの有効期限が切れていた場合\n※有効期限30分
+  AppServer --> Browser: 応答(401, エラーメッセージ)
+  Browser -> AppServer: /api/v1.0/refreshToken\n(リフレッシュトークン, JWT)
+  AppServer -> NoSQL: JWT取得\n(リフレッシュトークン)
+  NoSQL -> AppServer:応答()
+  alt 古いJWTとNoSQLに保存されていた\nJWTが同一ではない
+    AppServer -> Browser: 応答(401, エラーメッセージ)
+  end
+  alt リフレッシュトークンの有効期限が\n切れていた場合※1ヵ月
+    AppServer -> Browser: 応答(404, エラーメッセージ)
+    ref over User, Google: ログイン
+  end
+  AppServer -> AppServer: JWT発行()
+  AppServer -> NoSQL: リフレッシュトークン登録\n(リフレッシュトークン, JWT)
+  NoSQL --> AppServer: 応答()
+  AppServer --> Browser: 応答\n(リフレッシュトークン, JWT)
+  ref over Browser, AppServer: シーケンス番号001に戻る
+else 改竄されていた場合
+  AppServer -> Browser: 応答\n(401, エラーメッセージ)
+else ユーザーが権限を持っていないとき
+  AppServer -> Browser: 応答\n(401, エラーメッセージ)
+end
+AppServer -> AppServer: 何かしらコンテンツ取得()
+AppServer --> Browser: 応答(コンテンツ)
+
+@enduml
