@@ -11,7 +11,6 @@ services:
     volumes:
       - ../../GoodHabitsClient:/root/GoodHabitsClient
     command: sh -c "npm install && npm run dev"
-    tty: true
   server:
     image: goodhabits/server:latest
     depends_on:
@@ -37,6 +36,8 @@ services:
       - DATABASE_HOST=localhost
     ports:
       - "5432:5432"
+    volumes:
+      - $PWD/sql:/docker-entrypoint-initdb.d
   nosql:
       image: "redis:latest"
       container_name: nosql-ctr
