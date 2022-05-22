@@ -125,6 +125,7 @@
          <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="start_time" nullable="false" remarks="開始日時。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="end_time" nullable="false" remarks="終了日時。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="cost" nullable="false" remarks="金額。" size="131089" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_repeat" nullable="false" remarks="繰り返し登録された習慣=true, 繰り返し登録されていない習慣=false" size="1" type="bool" typeCode="-7"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="planned_habit_pkey" unique="true">
             <column ascending="true" name="id"/>

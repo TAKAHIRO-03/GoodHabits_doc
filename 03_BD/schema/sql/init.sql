@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS public.planned_habit (
     AND start_time < end_time
   ),
   cost DECIMAL NOT NULL CHECK (0.0 < cost),
+  is_repeat BOOLEAN NOT NULL DEFAULT false,
   FOREIGN KEY (account_id) REFERENCES public.account(id) ON DELETE CASCADE
 );
 
@@ -178,6 +179,8 @@ COMMENT ON COLUMN public.planned_habit.start_time IS '開始日時。';
 COMMENT ON COLUMN public.planned_habit.end_time IS '終了日時。';
 
 COMMENT ON COLUMN public.planned_habit.cost IS '金額。';
+
+COMMENT ON COLUMN public.planned_habit.is_repeat IS '繰り返し登録された習慣=true, 繰り返し登録されていない習慣=false';
 
 ALTER TABLE
   public.planned_habit OWNER TO ghuser;
