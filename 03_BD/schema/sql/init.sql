@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
 DROP TABLE IF EXISTS public.account;
 
 DROP TABLE IF EXISTS public.oauth_provider;
@@ -20,13 +22,11 @@ DROP TABLE IF EXISTS public.margin_time;
 
 DROP TABLE IF EXISTS public.maintenance_plan;
 
-CREATE TABLE IF NOT EXISTS public.oauth_provider (id SMALLINT PRIMARY KEY, types TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS public.oauth_provider (type TEXT PRIMARY KEY);
 
 COMMENT ON TABLE public.oauth_provider IS 'OAuthプロバイダー。サービス開始前に定義される。';
 
-COMMENT ON COLUMN public.oauth_provider.id IS 'oauth_providerの識別子を表します。';
-
-COMMENT ON COLUMN public.oauth_provider.types IS 'GOOGLE、TWITTER等の文字列を表します。';
+COMMENT ON COLUMN public.oauth_provider.type IS 'GOOGLE、TWITTER等の文字列を表します。';
 
 ALTER TABLE
   public.oauth_provider OWNER TO ghuser;
@@ -40,13 +40,13 @@ CREATE TABLE IF NOT EXISTS public.timezones (
 
 COMMENT ON TABLE public.timezones IS 'タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。';
 
-COMMENT ON COLUMN public.timezones.name IS '	時間帯名';
+COMMENT ON COLUMN public.timezones.name IS '時間帯名';
 
-COMMENT ON COLUMN public.timezones.abbrev IS '	時間帯省略形';
+COMMENT ON COLUMN public.timezones.abbrev IS '時間帯省略形';
 
 COMMENT ON COLUMN public.timezones.utc_offset IS 'UTCからのオフセット(正はグリニッジより西側を意味する)';
 
-COMMENT ON COLUMN public.timezones.is_dst IS '	現在夏時間である場合に真';
+COMMENT ON COLUMN public.timezones.is_dst IS '現在夏時間である場合に真';
 
 ALTER TABLE
   public.timezones OWNER TO ghuser;
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS public.account (
   is_locked BOOLEAN NOT NULL,
   timezones_name TEXT NOT NULL DEFAULT 'Asia/Tokyo',
   currency_iso_code TEXT NOT NULL DEFAULT 'JPY',
-  oauth_provider_id SMALLINT,
+  oauth_provider_type TEXT,
   created_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (timezones_name) REFERENCES public.timezones(name) ON DELETE
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS public.account (
     FOREIGN KEY (currency_iso_code) REFERENCES public.currency(iso_code) ON DELETE
   SET
     DEFAULT,
-    FOREIGN KEY (oauth_provider_id) REFERENCES oauth_provider(id) ON DELETE
+    FOREIGN KEY (oauth_provider_type) REFERENCES oauth_provider(type) ON DELETE
   SET
     NULL
 );
@@ -109,7 +109,7 @@ COMMENT ON COLUMN public.account.timezones_name IS 'タイムゾーン。';
 
 COMMENT ON COLUMN public.account.currency_iso_code IS '習慣計画時のお金を払う際の通貨。';
 
-COMMENT ON COLUMN public.account.oauth_provider_id IS 'OAuthプロバイダーのタイプ。';
+COMMENT ON COLUMN public.account.oauth_provider_type IS 'OAuthプロバイダーのタイプ。';
 
 COMMENT ON COLUMN public.account.created_time IS '作成日時。';
 
@@ -118,17 +118,11 @@ COMMENT ON COLUMN public.account.updated_time IS '更新日時。';
 ALTER TABLE
   public.account OWNER TO ghuser;
 
-CREATE TABLE IF NOT EXISTS public.roles (
-  id SMALLINT PRIMARY KEY,
-  role_label VARCHAR(30),
-  role_value VARCHAR(30)
-);
+CREATE TABLE IF NOT EXISTS public.roles (name VARCHAR(30) PRIMARY KEY);
 
 COMMENT ON TABLE public.roles IS '権限情報。認可に使用する権限。';
 
-COMMENT ON COLUMN public.roles.role_value IS 'ロール値。';
-
-COMMENT ON COLUMN public.roles.role_label IS 'ロール表示名。';
+COMMENT ON COLUMN public.roles.name IS 'ロール値。';
 
 ALTER TABLE
   public.roles OWNER TO ghuser;
@@ -153,16 +147,14 @@ CREATE TABLE IF NOT EXISTS public.planned_habit (
   id BIGSERIAL PRIMARY KEY,
   account_id BIGINT NOT NULL,
   title VARCHAR(100) NOT NULL CHECK (title <> ''),
-  start_time TIMESTAMPTZ NOT NULL CHECK (
-    CURRENT_TIMESTAMP <= start_time
-    AND start_time < end_time
-  ),
-  end_time TIMESTAMPTZ NOT NULL CHECK (
-    CURRENT_TIMESTAMP <= end_time
-    AND start_time < end_time
-  ),
+  start_time TIMESTAMPTZ NOT NULL CHECK (start_time < end_time),
+  end_time TIMESTAMPTZ NOT NULL,
   cost DECIMAL NOT NULL CHECK (0.0 < cost),
   is_repeat BOOLEAN NOT NULL DEFAULT false,
+  EXCLUDE USING gist (
+    account_id WITH =,
+    tstzrange(start_time, end_time) WITH &&
+  ),
   FOREIGN KEY (account_id) REFERENCES public.account(id) ON DELETE CASCADE
 );
 
@@ -185,13 +177,22 @@ COMMENT ON COLUMN public.planned_habit.is_repeat IS '繰り返し登録された
 ALTER TABLE
   public.planned_habit OWNER TO ghuser;
 
+CREATE TABLE IF NOT EXISTS public.executed_habit_status (name TEXT PRIMARY KEY);
+
+COMMENT ON TABLE public.executed_habit_status IS '実行済み習慣のステータス';
+
+COMMENT ON COLUMN public.executed_habit_status.name IS '未達成=NOT_ACHIVED、 達成=ACHIVED、運営都合キャンセル=CANCELED';
+
+ALTER TABLE
+  public.executed_habit_status OWNER TO ghuser;
+
 CREATE TABLE IF NOT EXISTS public.executed_habit (
   planned_habit_id BIGINT PRIMARY KEY,
   started_time TIMESTAMPTZ,
   ended_time TIMESTAMPTZ,
-  is_achieved BOOLEAN NOT NULL DEFAULT FALSE,
-  is_cancelled BOOLEAN NOT NULL DEFAULT FALSE,
-  FOREIGN KEY (planned_habit_id) REFERENCES public.planned_habit(id) ON DELETE CASCADE
+  executed_habit_status_name VARCHAR(30) NOT NULL DEFAULT 'CANCELED',
+  FOREIGN KEY (planned_habit_id) REFERENCES public.planned_habit(id) ON DELETE CASCADE,
+  FOREIGN KEY (executed_habit_status_name) REFERENCES public.executed_habit_status(name) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE public.executed_habit IS '実行済み習慣情報。';
@@ -202,9 +203,7 @@ COMMENT ON COLUMN public.executed_habit.started_time IS '開始された日時�
 
 COMMENT ON COLUMN public.executed_habit.ended_time IS '終了された日時。NULL=終了していない。';
 
-COMMENT ON COLUMN public.executed_habit.is_achieved IS '計画を予定通り実行できたか。true=達成, false=未達成。';
-
-COMMENT ON COLUMN public.executed_habit.is_cancelled IS '運営がメンテナンス等の不可抗力で取り消しとなった状態を表す。 true=キャンセルされた, false=キャンセルされていない。';
+COMMENT ON COLUMN public.executed_habit.executed_habit_status_name IS '実行済みタスクの状態をあらわします。';
 
 ALTER TABLE
   public.executed_habit OWNER TO ghuser;
@@ -238,8 +237,11 @@ ALTER TABLE
 
 CREATE TABLE IF NOT EXISTS public.maintenance_plan (
   id SMALLSERIAL PRIMARY KEY,
-  start_time TIMESTAMPTZ NOT NULL,
-  end_time TIMESTAMPTZ NOT NULL
+  start_time TIMESTAMPTZ NOT NULL CHECK (start_time < end_time),
+  end_time TIMESTAMPTZ NOT NULL,
+  EXCLUDE USING gist (
+    tstzrange(start_time, end_time) WITH &&
+  )
 );
 
 COMMENT ON TABLE public.maintenance_plan IS '運営のメンテナンス計画。';

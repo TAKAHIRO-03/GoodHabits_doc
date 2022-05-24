@@ -116,28 +116,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="id">id</span></td>
-                                    <td>int2</td>
-                                    <td>5</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="account.oauth_provider_id references oauth_provider.id via account_oauth_provider_id_fkey"><a href='account.html'>account</a><span class='relatedKey'>.oauth_provider_id</span></td>
-                                                <td class="constraint detail">account_oauth_provider_id_fkey<span title='Null on delete:&#10;Foreign key to parent set to NULL when parent deleted'>N</span></td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>oauth_providerの識別子を表します。</p></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="types">types</span></td>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="type">type</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title=''></td>
@@ -145,6 +124,10 @@
                                     <td>null</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="account.oauth_provider_type references oauth_provider.type via account_oauth_provider_type_fkey"><a href='account.html'>account</a><span class='relatedKey'>.oauth_provider_type</span></td>
+                                                <td class="constraint detail">account_oauth_provider_type_fkey<span title='Null on delete:&#10;Foreign key to parent set to NULL when parent deleted'>N</span></td>
+                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -181,7 +164,7 @@
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> oauth_provider_pkey</td>
                                     <td>Primary key</td>
                                     <td><span title='Ascending'>Asc</span></td>
-                                    <td>id</td>
+                                    <td>type</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -206,19 +189,19 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="360,5,553,240">
-<area shape="rect" id="node2" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,120,316,248">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="360,5,573,240">
+<area shape="rect" id="node2" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,120,316,219">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/oauth_provider.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="360,55,553,289">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="360,55,573,289">
 <area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="83,145,238,233">
-<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,251,316,379">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,251,316,349">
 <area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="79,40,243,128">
-<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="609,5,781,93">
-<area shape="rect" id="node6" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="597,111,793,199">
+<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="629,5,801,93">
+<area shape="rect" id="node6" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="617,111,813,199">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/oauth_provider.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

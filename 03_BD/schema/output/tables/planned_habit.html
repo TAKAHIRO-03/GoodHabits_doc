@@ -276,6 +276,12 @@
                                     <td><span title='Ascending'>Asc</span></td>
                                     <td>id</td>
                                 </tr>
+                                <tr>
+                                    <td title='Indexed'>planned_habit_account_id_tstzrange_excl</td>
+                                    <td>Performance</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>account_id</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div><!-- /.box-body -->
@@ -300,19 +306,15 @@
                                 <tbody>
                                 <tr>
                                     <td>planned_habit_check</td>
-                                    <td>(((CURRENT_TIMESTAMP &lt;= start_time) AND (start_time &lt; end_time)))</td>
-                                </tr>
-                                <tr>
-                                    <td>planned_habit_title_check</td>
-                                    <td>(((title)::text &lt;&gt; &#39;&#39;::text))</td>
+                                    <td>((start_time &lt; end_time))</td>
                                 </tr>
                                 <tr>
                                     <td>planned_habit_cost_check</td>
                                     <td>((0.0 &lt; cost))</td>
                                 </tr>
                                 <tr>
-                                    <td>planned_habit_check1</td>
-                                    <td>(((CURRENT_TIMESTAMP &lt;= end_time) AND (start_time &lt; end_time)))</td>
+                                    <td>planned_habit_title_check</td>
+                                    <td>(((title)::text &lt;&gt; &#39;&#39;::text))</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -337,23 +339,24 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="executed_habit.html" target="_top" title="executed_habit" alt="" coords="611,5,815,123">
-<area shape="rect" id="node2" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="243,71,547,345">
-<area shape="rect" id="node4" href="account.html" target="_top" title="account" alt="" coords="5,103,199,337">
-<area shape="rect" id="node3" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="591,140,836,257">
+<area shape="rect" id="node1" href="executed_habit.html" target="_top" title="executed_habit" alt="" coords="611,5,889,152">
+<area shape="rect" id="node2" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="263,85,567,360">
+<area shape="rect" id="node4" href="account.html" target="_top" title="account" alt="" coords="5,117,219,352">
+<area shape="rect" id="node3" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="627,169,873,287">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/planned_habit.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,232,445,467">
-<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,323,184,411">
-<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,428,208,516">
-<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,217,189,305">
-<area shape="rect" id="node5" href="executed_habit.html" target="_top" title="executed_habit" alt="" coords="858,5,1062,123">
-<area shape="rect" id="node6" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="489,71,793,345">
-<area shape="rect" id="node7" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="555,363,727,451">
-<area shape="rect" id="node8" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="837,140,1083,257">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,167,465,401">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,257,184,345">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,363,208,451">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,152,189,240">
+<area shape="rect" id="node5" href="executed_habit.html" target="_top" title="executed_habit" alt="" coords="857,256,1136,403">
+<area shape="rect" id="node6" href="executed_habit_status.html" target="_top" title="executed_habit_status" alt="" coords="533,403,790,491">
+<area shape="rect" id="node7" href="planned_habit.html" target="_top" title="planned_habit" alt="" coords="509,5,813,280">
+<area shape="rect" id="node8" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="575,297,747,385">
+<area shape="rect" id="node9" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="874,8,1119,125">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/planned_habit.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

@@ -21,8 +21,8 @@
          <column autoUpdated="false" defaultValue="'JPY'::text" digits="0" id="6" name="currency_iso_code" nullable="false" remarks="習慣計画時のお金を払う際の通貨。" size="2147483647" type="text" typeCode="12">
             <parent column="iso_code" foreignKey="account_currency_iso_code_fkey" implied="false" onDeleteCascade="false" schema="public" table="currency"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="oauth_provider_id" nullable="true" remarks="OAuthプロバイダーのタイプ。" size="5" type="int2" typeCode="5">
-            <parent column="id" foreignKey="account_oauth_provider_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="oauth_provider"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="oauth_provider_type" nullable="true" remarks="OAuthプロバイダーのタイプ。" size="2147483647" type="text" typeCode="12">
+            <parent column="type" foreignKey="account_oauth_provider_type_fkey" implied="false" onDeleteCascade="false" schema="public" table="oauth_provider"/>
          </column>
          <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="8" name="created_time" nullable="false" remarks="作成日時。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="9" name="updated_time" nullable="false" remarks="更新日時。" size="35" type="timestamptz" typeCode="93"/>
@@ -42,9 +42,7 @@
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="country" nullable="false" remarks="国名 例）日本" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="sign" nullable="false" remarks="通貨記号 例）￥" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="通貨名 例）円" size="2147483647" type="text" typeCode="12">
-            <parent column="name" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="timezones"/>
-         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="通貨名 例）円" size="2147483647" type="text" typeCode="12"/>
          <primaryKey column="iso_code" sequenceNumberInPK="1"/>
          <index name="currency_pkey" unique="true">
             <column ascending="true" name="iso_code"/>
@@ -56,11 +54,21 @@
          </column>
          <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="started_time" nullable="true" remarks="開始された日時。NULL=開始されていない。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="ended_time" nullable="true" remarks="終了された日時。NULL=終了していない。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_achieved" nullable="false" remarks="計画を予定通り実行できたか。true=達成, false=未達成。" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_cancelled" nullable="false" remarks="運営がメンテナンス等の不可抗力で取り消しとなった状態を表す。 true=キャンセルされた, false=キャンセルされていない。" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="'CANCELED'::character varying" digits="0" id="3" name="executed_habit_status_name" nullable="false" remarks="実行済みタスクの状態をあらわします。" size="30" type="varchar" typeCode="12">
+            <parent column="name" foreignKey="executed_habit_executed_habit_status_name_fkey" implied="false" onDeleteCascade="true" schema="public" table="executed_habit_status"/>
+         </column>
          <primaryKey column="planned_habit_id" sequenceNumberInPK="1"/>
          <index name="executed_habit_pkey" unique="true">
             <column ascending="true" name="planned_habit_id"/>
+         </index>
+      </table>
+      <table name="executed_habit_status" numRows="0" remarks="実行済み習慣のステータス" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="未達成=NOT_ACHIVED、 達成=ACHIVED、運営都合キャンセル=CANCELED" size="2147483647" type="text" typeCode="12">
+            <child column="executed_habit_status_name" foreignKey="executed_habit_executed_habit_status_name_fkey" implied="false" onDeleteCascade="true" schema="public" table="executed_habit"/>
+         </column>
+         <primaryKey column="name" sequenceNumberInPK="1"/>
+         <index name="executed_habit_status_pkey" unique="true">
+            <column ascending="true" name="name"/>
          </index>
       </table>
       <table name="failed_auth" numRows="0" remarks="認証失敗イベント。アカウントのロックアウト機能で用いるために、認証失敗時に残す情報。" schema="public" type="TABLE">
@@ -83,6 +91,8 @@
          <index name="maintenance_plan_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="maintenance_plan_tstzrange_excl" unique="false"/>
+         <checkConstraint constraint="((start_time &lt; end_time))" name="maintenance_plan_check"/>
       </table>
       <table name="margin_time" numRows="0" remarks="マージンの時間。単位は分。例）計画済み習慣±5分が実行完了とするの時間。この±5分を表す。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2" typeCode="5"/>
@@ -94,13 +104,12 @@
          </index>
       </table>
       <table name="oauth_provider" numRows="0" remarks="OAuthプロバイダー。サービス開始前に定義される。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="oauth_providerの識別子を表します。" size="5" type="int2" typeCode="5">
-            <child column="oauth_provider_id" foreignKey="account_oauth_provider_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="type" nullable="false" remarks="GOOGLE、TWITTER等の文字列を表します。" size="2147483647" type="text" typeCode="12">
+            <child column="oauth_provider_type" foreignKey="account_oauth_provider_type_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="types" nullable="false" remarks="GOOGLE、TWITTER等の文字列を表します。" size="2147483647" type="text" typeCode="12"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <primaryKey column="type" sequenceNumberInPK="1"/>
          <index name="oauth_provider_pkey" unique="true">
-            <column ascending="true" name="id"/>
+            <column ascending="true" name="type"/>
          </index>
       </table>
       <table name="payment_job_history" numRows="0" remarks="支払いのジョブ履歴。" schema="public" type="TABLE">
@@ -130,24 +139,23 @@
          <index name="planned_habit_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <checkConstraint constraint="(((CURRENT_TIMESTAMP &lt;= start_time) AND (start_time &lt; end_time)))" name="planned_habit_check"/>
-         <checkConstraint constraint="(((CURRENT_TIMESTAMP &lt;= end_time) AND (start_time &lt; end_time)))" name="planned_habit_check1"/>
+         <index name="planned_habit_account_id_tstzrange_excl" unique="false">
+            <column ascending="true" name="account_id"/>
+         </index>
+         <checkConstraint constraint="((start_time &lt; end_time))" name="planned_habit_check"/>
          <checkConstraint constraint="((0.0 &lt; cost))" name="planned_habit_cost_check"/>
          <checkConstraint constraint="(((title)::text &lt;&gt; ''::text))" name="planned_habit_title_check"/>
       </table>
       <table name="roles" numRows="0" remarks="権限情報。認可に使用する権限。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="5" type="int2" typeCode="5"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="role_label" nullable="true" remarks="ロール表示名。" size="30" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="role_value" nullable="true" remarks="ロール値。" size="30" type="varchar" typeCode="12"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="ロール値。" size="30" type="varchar" typeCode="12"/>
+         <primaryKey column="name" sequenceNumberInPK="1"/>
          <index name="roles_pkey" unique="true">
-            <column ascending="true" name="id"/>
+            <column ascending="true" name="name"/>
          </index>
       </table>
       <table name="timezones" numRows="0" remarks="タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="時間帯名" size="2147483647" type="text" typeCode="12">
             <child column="timezones_name" foreignKey="account_timezones_name_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
-            <child column="name" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="currency"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="abbrev" nullable="false" remarks="時間帯省略形" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="utc_offset" nullable="false" remarks="UTCからのオフセット(正はグリニッジより西側を意味する)" size="49" type="interval" typeCode="1111"/>
