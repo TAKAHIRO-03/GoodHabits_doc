@@ -21,17 +21,17 @@ Browser -> WebServer: /login 静的ページ要求()
 WebServer --> Browser: 応答()
 Browser -> Browser: レンダリング()
 
-User -> Browser: ログインボタン押下(ログインID, パスワード)
+User -> Browser: ログインボタン押下(メールアドレス, パスワード)
 alt 不正なパラメーターの場合
   Browser --> Browser: エラー応答()
 end
 
-Browser -> AppServer: /api/v1.0/login (ログインID, パスワード)
+Browser -> AppServer: /api/v1.0/login (メールアドレス, パスワード)
 alt 不正なパラメーターの場合
   AppServer --> Browser: 応答(401,エラーメッセージ)
 end
 
-AppServer -> RDB: アカウント情報とログイン試行回数取得\n(ログインID)
+AppServer -> RDB: アカウント情報とログイン試行回数取得\n(メールアドレス)
 RDB --> AppServer: 応答\n(アカウント情報, ログイン試行回数)
 
 alt アカウント情報が存在しない時
@@ -47,15 +47,32 @@ alt IDまたはパスワードが間違っている場合
   AppServer --> Browser: 応答(401,エラーメッセージ)
 end
 
-AppServer -> AppServer: アクセストークンとリフレッシュトークン発行()
-AppServer -> NoSQL: アクセストークン登録\n(アクセストークン)
-NoSQL --> AppServer: 応答()
-AppServer -> NoSQL: リフレッシュトークン登録\n(UUID, アクセストークン)
-NoSQL --> AppServer: 応答()
+group アクセストークンとリフレッシュトークン発行
+
+  AppServer -> AppServer: 既存のアクセストークン取得(メールアドレス)
+  alt アクセストークンが存在している場合
+    AppServer -> NoSQL: アクセストークン削除\n(メールアドレス)
+    NoSQL --> AppServer: 応答()
+    AppServer -> NoSQL: リフレッシュトークン削除\n(メールアドレス)
+    NoSQL --> AppServer: 応答()
+  end
+
+  AppServer -> AppServer: アクセストークンとリフレッシュトークン発行()
+  AppServer -> NoSQL: アクセストークン登録\n(メールアドレス, アクセストークン)
+  NoSQL --> AppServer: 応答()
+  AppServer -> NoSQL: リフレッシュトークン登録\n(メールアドレス, リフレッシュトークン, アクセストークン)
+  NoSQL --> AppServer: 応答()
+
+  note right of AppServer
+    補足：1端末のみしかログインすることが出来ない。
+         既にログインしていた端末があった場合は、既存のトークンを削除し
+         再度、トークンを発行する。
+  end note
+
+end
 
 AppServer -> Browser: 応答\n(アクセストークン, リフレッシュトークン)
 Browser -> Browser: 応答データをローカルストレージに保存\n(アクセストークン, リフレッシュトークン)
-
 Browser -> Browser: /plan リダイレクト
 
 == Googleログイン ==
@@ -94,11 +111,7 @@ alt アカウント情報が存在しない場合
   RDB --> AppServer: 応答()
 end
 
-AppServer -> AppServer: アクセストークンとリフレッシュトークン発行()
-AppServer -> NoSQL: アクセストークン登録\n(アクセストークン, アカウント情報)
-NoSQL --> AppServer: 応答()
-AppServer -> NoSQL: リフレッシュトークン登録\n(リフレッシュトークン, アカウント情報)
-NoSQL --> AppServer: 応答()
+ref over AppServer, NoSQL: アクセストークンとリフレッシュトークン発行
 
 AppServer -> Browser: 応答\n(アクセストークン, リフレッシュトークン)
 Browser -> Browser: 応答データをローカルストレージに保存\n(アクセストークン, リフレッシュトークン)
