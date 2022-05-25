@@ -1,0 +1,37 @@
+@startuml 退会
+autonumber "[000]"
+title 退会
+
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+!pragma teoz true
+
+User -> Browser: /planリクエスト()
+Browser -> WebServer: /plan静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> WebServer: start_buzzer_sounds.mp3\n音声データ要求()
+WebServer --> Browser: 応答()
+
+User -> Browser: 退会ボタン押下
+Browser -> AppServer: DELETE /api/v1.0/accounts()
+
+group アカウント削除(非同期)
+  AppServer -> NoSQL: リフレッシュトークン削除()
+  NoSQL --> AppServer: 応答()
+  AppServer -> NoSQL: アクセストークン削除()
+  NoSQL --> AppServer: 応答()
+  AppServer -> RDB: アカウント削除(メールアドレス)
+  RDB --> AppServer: 応答()
+end
+
+AppServer --> Browser: 応答(204)
+Browser -> Browser: 退会完了画面表示
+Browser -> Browser: / ホーム画面表示
+
+@enduml
