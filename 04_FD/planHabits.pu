@@ -18,7 +18,7 @@ ref over User, Google: ログイン
 User -> Browser: /planリクエスト()
 Browser -> WebServer: /plan静的ページ要求()
 WebServer --> Browser: 応答()
-Browser -> WebServer: start_buzzer_sounds.mp3\n音声データ要求()
+Browser -> WebServer: startBuzzerSounds.mp3\n音声データ要求()
 WebServer --> Browser: 応答()
 
 ' READ ALL
@@ -27,14 +27,14 @@ ref over User, Google: 認証・認可
 AppServer -> NoSQL: キャッシュ確認\n(PlannedHabit:accountId:page:size)
 NoSQL --> AppServer: 応答()
 alt キャッシュされている場合
-  AppServer -> AppServer: 過去のデータが含まれていないか確認\n(planned_habitデータ, now)
+  AppServer -> AppServer: 過去のデータが含まれていないか確認\n(plannedHabitデータ, now)
   alt 過去のデータが含まれていた場合
     AppServer -> RDB: planned_habitテーブル参照\n(accountId, page, size, now)
     note right of AppServer
       過去の習慣データは取得しない
     end note
     RDB --> AppServer: 応答()
-    AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:page:size, \nplanned_habitデータ)
+    AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:page:size, \nplannedHabitデータ)
   end
 else キャッシュされていない場合
   AppServer -> RDB: planned_habitテーブル参照\n(accountId, page, size, now)
@@ -42,7 +42,7 @@ else キャッシュされていない場合
     過去の習慣データは取得しない
   end note
   RDB --> AppServer: 応答()
-  AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:page:size, \nplanned_habitデータ)
+  AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:page:size, \nplannedHabitデータ)
 end
 
 AppServer --> Browser: 応答()
@@ -50,9 +50,9 @@ Browser -> Browser: 習慣一覧表示()
 
 ' CREATE
 User -> Browser: 習慣登録ボタン押下()
-Browser -> AppServer: 習慣登録\nPOST /api/v1.0/plannedHabits\n(title, start_time, end_time, cost)
+Browser -> AppServer: 習慣登録\nPOST /api/v1.0/plannedHabits\n(title, startTime, endTime, cost)
 ref over User, Google: 認証・認可
-AppServer -> RDB: 習慣登録\n(account_id, title, start_time, end_time, cost)
+AppServer -> RDB: 習慣登録\n(accountId, title, startTime, endTime, cost)
 RDB --> AppServer: 応答()
 AppServer --> Browser: 応答(201)
 Browser -> Browser: 習慣登録完了表示()
@@ -64,14 +64,14 @@ ref over User, Google: 認証・認可
 AppServer -> NoSQL: キャッシュ確認\n(PlannedHabit:accountId:habitId)
 NoSQL --> AppServer: 応答()
 alt キャッシュされている場合
-  AppServer -> AppServer: 過去のデータが含まれていないか確認\n(planned_habitデータ, now)
+  AppServer -> AppServer: 過去のデータが含まれていないか確認\n(plannedHabitデータ, now)
   alt 過去のデータが含まれていた場合
     AppServer -> RDB: planned_habitテーブル参照\n(accountId, habitId, now)
     note right of AppServer
       過去の習慣データは取得しない
     end note
     RDB --> AppServer: 応答()
-    AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:habitId, \nplanned_habitデータ)
+    AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:habitId, \nplannedHabitデータ)
   end
 else キャッシュされていない場合
   AppServer -> RDB: planned_habitテーブル参照\n(accountId, habitId, now)
@@ -79,7 +79,7 @@ else キャッシュされていない場合
     過去の習慣データは取得しない
   end note
   RDB --> AppServer: 応答()
-  AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:habitId, \nplanned_habitデータ)
+  AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:habitId, \nplannedHabitデータ)
 end
 
 AppServer --> Browser: 応答()
@@ -89,8 +89,15 @@ Browser -> Browser: 習慣表示()
 User -> Browser: 習慣削除ボタン押下()
 Browser -> AppServer: 習慣削除\nDELETE /api/v1.0/plannedHabits/1
 ref over User, Google: 認証・認可
-AppServer -> RDB: 習慣削除\n(account_id, planned_habit.id)
+AppServer -> RDB: 習慣削除\n(accountId, plannedHabit.id, timestamp + cancelMarginTime)
+note right of AppServer
+  キャンセルすることが出来る時間は
+  起動時にメモリに保持しておく。
+end note
 RDB --> AppServer: 応答()
+alt 更新件数が0件の時
+  AppServer --> Browser: 応答(404,エラーメッセージ)
+end
 AppServer --> Browser: 応答(204)
 Browser -> Browser: 習慣削除完了表示()
 

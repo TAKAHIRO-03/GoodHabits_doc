@@ -15,7 +15,7 @@ participant MailBox
 User -> Browser: /planリクエスト()
 Browser -> WebServer: /plan静的ページ要求()
 WebServer --> Browser: 応答()
-Browser -> WebServer: start_buzzer_sounds.mp3\n音声データ要求()
+Browser -> WebServer: startBuzzerSounds.mp3\n音声データ要求()
 WebServer --> Browser: 応答()
 
 User -> Browser: 退会ボタン押下
