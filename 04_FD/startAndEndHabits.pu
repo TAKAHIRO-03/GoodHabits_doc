@@ -1,0 +1,65 @@
+@startuml 習慣の開始と終了
+title 習慣の開始と終了
+
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+!pragma teoz true
+
+ref over User, Google: ログイン
+
+autonumber "[000]"
+User -> Browser: /planリクエスト()
+Browser -> WebServer: /plan静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> WebServer: startBuzzerSounds.mp3\n音声データ要求()
+WebServer --> Browser: 応答()
+
+...習慣開始時間になったら...
+
+autonumber "[000]"
+Browser -> Browser: 音声で通知()
+User -> Browser: 開始ボタン押下
+Browser -> AppServer: PATCH\n/api/v1.0/executedHabits/1/start
+ref over User, Google: 認証・認可
+alt 不正なパラメーターの場合
+  AppServer --> Browser: 応答(401,エラーメッセージ)
+end
+
+AppServer -> AppServer: 開始タイムスタンプ発行()
+AppServer -> RDB: 実行済み習慣更新\n(アカウントID, 開始時間, 実行済み習慣ID)
+RDB -> AppServer: 応答()
+alt 更新件数が0件の時
+  AppServer --> Browser: 応答(404,エラーメッセージ)
+end
+AppServer --> Browser: 応答(204)
+Browser -> Browser: ストップウォッチスタート()
+
+...習慣終了時間になったら...
+Browser -> Browser: 音声で通知()
+User -> Browser: 終了ボタン押下
+Browser -> AppServer: PATCH\n/api/v1.0/executedHabits/1/end
+ref over User, Google: 認証・認可
+alt 不正なパラメーターの場合
+  AppServer --> Browser: 応答(401,エラーメッセージ)
+end
+AppServer -> AppServer: 終了タイムスタンプ発行()
+AppServer -> RDB: 計画済み・実行済み習慣取得\n(アカウントID, 実行済み習慣ID)
+RDB -> AppServer: 応答()
+
+AppServer -> AppServer: 達成したか否か判定\n(終了タイムスタンプ, 計画済み・実行済み習慣)
+note right of AppServer
+  達成したかどうかを判定する際に使用するマージンは
+  起動時にメモリに保持しておく。
+end note
+
+AppServer -> RDB: 実行済み習慣更新\n(アカウントID, 終了時間, 実行済み習慣ID, 判定結果)
+RDB -> AppServer: 応答()
+AppServer --> Browser: 応答(204)
+
+@enduml
