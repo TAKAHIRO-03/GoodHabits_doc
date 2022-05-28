@@ -77,6 +77,6 @@ NoSQL --> AppServer: 応答()
 ref over Browser,RDB,NoSQL: ログイン.アクセストークンとリフレッシュトークン発行
 
 AppServer --> Browser: 応答(JWT,リフレッシュトークン)
-Browser -> Browser: /plan リダイレクト()
+Browser -> Browser: /habits リダイレクト()
 
 @enduml

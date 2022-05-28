@@ -15,8 +15,8 @@ participant Google
 autonumber "[000]"
 ref over User, Google: ログイン
 
-User -> Browser: /planリクエスト()
-Browser -> WebServer: /plan静的ページ要求()
+User -> Browser: /habitsリクエスト()
+Browser -> WebServer: /habits静的ページ要求()
 WebServer --> Browser: 応答()
 Browser -> WebServer: startBuzzerSounds.mp3\n音声データ要求()
 WebServer --> Browser: 応答()
@@ -50,6 +50,7 @@ Browser -> Browser: 習慣一覧表示()
 
 ' CREATE
 User -> Browser: 習慣登録ボタン押下()
+Browser -> Browser: /plan/create()遷移
 Browser -> AppServer: 習慣登録\nPOST /api/v1.0/plannedHabits\n(title, startTime, endTime, cost)
 ref over User, Google: 認証・認可
 AppServer -> RDB: 習慣登録\n(accountId, title, startTime, endTime, cost)
@@ -57,36 +58,10 @@ RDB --> AppServer: 応答()
 AppServer --> Browser: 応答(201)
 Browser -> Browser: 習慣登録完了表示()
 
-' READ ONE
-User -> Browser: 計画済み習慣押下()
-Browser -> AppServer: 計画済みの習慣取得\nGET /api/v1.0/plannedHabits/1
-ref over User, Google: 認証・認可
-AppServer -> NoSQL: キャッシュ確認\n(PlannedHabit:accountId:habitId)
-NoSQL --> AppServer: 応答()
-alt キャッシュされている場合
-  AppServer -> AppServer: 過去のデータが含まれていないか確認\n(plannedHabitデータ, now)
-  alt 過去のデータが含まれていた場合
-    AppServer -> RDB: planned_habitテーブル参照\n(accountId, habitId, now)
-    note right of AppServer
-      過去の習慣データは取得しない
-    end note
-    RDB --> AppServer: 応答()
-    AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:habitId, \nplannedHabitデータ)
-  end
-else キャッシュされていない場合
-  AppServer -> RDB: planned_habitテーブル参照\n(accountId, habitId, now)
-  note right of AppServer
-    過去の習慣データは取得しない
-  end note
-  RDB --> AppServer: 応答()
-  AppServer -> NoSQL: キャッシュ登録\n(PlannedHabit:accountId:habitId, \nplannedHabitデータ)
-end
-
-AppServer --> Browser: 応答()
-Browser -> Browser: 習慣表示()
-
 ' DELETE
 User -> Browser: 習慣削除ボタン押下()
+Browser -> Browser: 確認ダイヤログ表示
+User -> Browser: OK押下
 Browser -> AppServer: 習慣削除\nDELETE /api/v1.0/plannedHabits/1
 ref over User, Google: 認証・認可
 AppServer -> RDB: 習慣削除\n(accountId, plannedHabit.id, timestamp + cancelMarginTime)
@@ -100,6 +75,5 @@ alt 更新件数が0件の時
 end
 AppServer --> Browser: 応答(204)
 Browser -> Browser: 習慣削除完了表示()
-
 
 @enduml

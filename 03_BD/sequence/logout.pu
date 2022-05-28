@@ -12,8 +12,8 @@ participant MailServer
 participant MailBox
 !pragma teoz true
 
-User -> Browser: /planリクエスト()
-Browser -> WebServer: /plan静的ページ要求()
+User -> Browser: /habitsリクエスト()
+Browser -> WebServer: /habits静的ページ要求()
 WebServer --> Browser: 応答()
 Browser -> WebServer: startBuzzerSounds.mp3\n音声データ要求()
 WebServer --> Browser: 応答()
