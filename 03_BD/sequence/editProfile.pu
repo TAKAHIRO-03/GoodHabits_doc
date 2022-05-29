@@ -1,0 +1,54 @@
+@startuml プロフィール編集
+title プロフィール編集
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+participant Google
+!pragma teoz true
+
+autonumber "[000]"
+
+User -> Browser: /habitsリクエスト()
+Browser -> WebServer: /habits静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> WebServer: startBuzzerSounds.mp3\n音声データ要求()
+WebServer --> Browser: 応答()
+
+group 新しいパスワードに変更
+  User -> Browser: /newpassリクエスト()
+  Browser -> Browser: レンダリング
+  User -> Browser: 再登録ボタン押下\n(現在のパスワード, 新しいパスワード,\n 新しいパスワード確認)
+  alt 不正な入力値の場合
+    Browser --> Browser: エラー画面表示()
+  end
+  Browser -> AppServer: パスワード再発行\n/api/v1.0/accounts/password\n(currentPassword, \npassword, confirmPassword)
+  ref over User, Google: 認証・認可
+  AppServer -> AppServer: 現在のパスワードと入力値のパスワード比較\n(現在のパスワード)
+  alt 異なっている場合
+    AppServer -> Browser: 応答(401, エラーメッセージ)
+    Browser -> Browser: エラー画面表示()
+  end
+
+  AppServer -> AppServer: パスワードハッシュ化\n(新しいパスワード)
+  AppServer -> RDB: パスワード更新\n(メールアドレス, 新しいパスワード)
+  note right of AppServer
+    JWTの更新が必要かどうかは実装しながら決める
+  end note
+  RDB -> AppServer: 応答()
+  AppServer -> Browser: 応答()
+  Browser -> Browser: 更新完了表示()
+end
+
+group クレジットカード情報登録
+note right of User
+  実装しながら決める。以下実装例。
+  https://stripe.com/docs/checkout/quickstart
+end note
+end
+
+@enduml

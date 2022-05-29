@@ -62,7 +62,7 @@ User -> Browser: /auth/account?authToken=hogehoge\nリクエスト()
 Browser -> WebServer: /auth/account\n静的ページ要求()
 WebServer --> Browser: 応答()
 Browser -> Browser: レンダリング()
-Browser -> AppServer: トークン送信(認証トークン)
+Browser -> AppServer: GET /api/v1.0/auth/accounts\n(認証トークン)
 AppServer -> NoSQL: アカウント仮登録情報参照\n(認証トークン)
 NoSQL --> AppServer: 応答(メールアドレス,パスワード)
 alt 認証トークンが存在しない時
@@ -76,7 +76,7 @@ AppServer -> NoSQL: 認証トークン削除(認証トークン)
 NoSQL --> AppServer: 応答()
 ref over Browser,RDB,NoSQL: ログイン.アクセストークンとリフレッシュトークン発行
 
-AppServer --> Browser: 応答(JWT,リフレッシュトークン)
+AppServer --> Browser: 応答\n(303,JWT,リフレッシュトークン)
 Browser -> Browser: /habits リダイレクト()
 
 @enduml

@@ -1,0 +1,97 @@
+@startuml パスワード再発行
+title パスワード再発行
+actor User
+participant Browser
+participant WebServer
+participant AppServer
+participant RDB
+participant NoSQL
+participant MailServer
+participant MailBox
+participant Google
+!pragma teoz true
+
+autonumber "[000]"
+
+User -> Browser: 起動
+User -> Browser: /reissuePassリクエスト()
+Browser -> WebServer: /reissuePass静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> Browser: レンダリング()
+
+User -> Browser: 入力・送信押下\n(メールアドレス)
+Browser -> Browser: 入力値チェック\n(メールアドレス)
+alt 不正な入力値の場合
+  Browser -> Browser: エラー画面表示()
+end
+Browser -> AppServer: POST /api/v1.0/reissuePass/reception\n(メールアドレス)
+alt 不正な入力値の場合
+  AppServer --> Browser: 応答\n(400,エラーメッセージ)
+  Browser -> Browser: エラー画面表示()
+end
+
+AppServer --> Browser: 応答(201)
+
+group NoSQLにパスワード再登録情報仮登録\n及びメール送信(非同期)
+  autonumber "[000]"
+  AppServer -> AppServer: 認証トークン発行()
+  note right of AppServer
+    認証トークンはUUIDを発行する
+  end note
+  AppServer -> NoSQL: パスワード再発行受付\n(認証トークン,メールアドレス)
+  note right of AppServer
+    パスワード再発行情報のTTLは1日
+  　キー:認証トークン, 値:メールアドレス
+  end note
+  NoSQL --> AppServer: 応答()
+  AppServer -> MailServer: メール送信(認証トークン,メールアドレス,URL)
+  MailServer --> AppServer: 応答()
+end
+
+…ユーザーがメール受信後…
+autonumber "[000]"
+
+User -> MailBox: メール確認()
+User -> Browser: /auth/reissuePass?authToken=hogehoge\nリクエスト()
+Browser -> WebServer: /auth/reissuePass\n静的ページ要求()
+WebServer --> Browser: 応答()
+Browser -> Browser: レンダリング()
+Browser -> AppServer: GET /api/v1.0/auth/reissuePass\n(認証トークン)
+AppServer -> NoSQL: パスワード再発行情報参照\n(認証トークン)
+NoSQL --> AppServer: 応答()
+alt 認証トークンが存在しない時
+  AppServer --> Browser: 応答(404,エラーメッセージ)
+  Browser -> Browser: エラー内容表示()
+  Browser -> Browser: / リダイレクト()
+end
+
+AppServer --> Browser: 応答()
+Browser -> Browser: /reissuePass/create\nリダイレクト
+
+User -> Browser: 入力値送信\n(パスワード, 確認用パスワード)
+alt 不正な入力値の場合
+  Browser -> Browser: エラー画面表示()
+end
+Browser -> AppServer: POST /api/v1.0/reissuePass\n(パスワード, 確認用パスワード, 認証トークン)
+alt 不正な入力値の場合
+  AppServer --> Browser: 応答\n(400,エラーメッセージ)
+  Browser -> Browser: エラー画面表示()
+end
+alt 認証トークンが存在しない時
+  AppServer --> Browser: 応答(404,エラーメッセージ)
+  Browser -> Browser: エラー内容表示()
+  Browser -> Browser: / リダイレクト()
+end
+AppServer -> NoSQL: パスワード再発行情報参照\n(認証トークン)
+NoSQL --> AppServer: 応答(メールアドレス)
+AppServer -> RDB: アカウント情報取得(メールアドレス)
+RDB -> AppServer: 応答(アカウント情報)
+AppServer -> AppServer: パスワードハッシュ化(パスワード)
+AppServer -> RDB: アカウント更新(メールアドレス, パスワード)
+RDB -> AppServer: 応答()
+AppServer -> NoSQL: 認証トークン削除(認証トークン)
+NoSQL --> AppServer: 応答()
+AppServer --> Browser: 応答()
+Browser -> Browser: パスワード更新完了画面表示()
+
+@enduml
