@@ -6,6 +6,7 @@ services:
     container_name: client-ctr
     environment:
       - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
     ports:
       - '8888:8888'
     volumes:
