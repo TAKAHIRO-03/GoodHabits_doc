@@ -66,7 +66,7 @@ alt 認証トークンが存在しない時
 end
 
 AppServer --> Browser: 応答()
-Browser -> Browser: /reissuePass/create\nリダイレクト
+Browser -> Browser: /reissuePass\nリダイレクト
 
 User -> Browser: 入力値送信\n(パスワード, 確認用パスワード)
 alt 不正な入力値の場合

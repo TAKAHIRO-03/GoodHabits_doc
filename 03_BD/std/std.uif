@@ -106,7 +106,7 @@ clk 11-4
 input 12-1,12-2 then clk 12-5
 ==>/habits
 clk 12-3
-==>/reissuePass/create
+==>/reissuePass
 clk 12-4
 ==>/pp
 
@@ -133,7 +133,7 @@ clk 13-5
 clk me then redirect /habits
 ==>/habits
 
-[/reissuePass/create]
+[/reissuePass]
 17-1:メールアドレス
 17-2:送信
 --
