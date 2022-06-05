@@ -279,6 +279,11 @@ paramは必ずプレースホルダー（:param）にバインド（割り当て
 
 [有益なReactライブラリまとめ](https://qiita.com/ozora/items/33e00dcaca372db04560)
 
+## Reactコンポーネント設計
+以下のWebサイトを基に、実装していくこと。
+
+[【React/Vue.js】コンポーネント設計の（個人的）ベストプラクティス | Offers Tech Blog](https://zenn.dev/offers/articles/20220523-component-design-best-practice)
+
 ## メンテナンス
 * 運用者がGoodHabitsをメンテナンス状態にすることが出来ること。
 * メンテナンス時はメンテナンス画面を表示すること。
