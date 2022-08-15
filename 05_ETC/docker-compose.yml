@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   client:
-    image: goodhabits/client:latest
+    image: havetodo/client:latest
     container_name: client-ctr
     environment:
       - NODE_ENV=development
@@ -11,10 +11,10 @@ services:
       - '8888:8888' # develop port
       - '4173:4173' # preview port
     volumes:
-      - ../../GoodHabitsClient:/root/GoodHabitsClient
+      - ../../HaveTodoClient:/root/HaveTodoClient
     command: sh -c "npm install && npm run dev"
   server:
-    image: goodhabits/server:latest
+    image: havetodo/server:latest
     depends_on:
       - rdb
       - nosql
@@ -27,7 +27,7 @@ services:
       - '8000:8000'
     volumes:
       - $HOME/.m2:/root/.m2
-      - ../../GoodHabitsServer:/app/GoodHabitsServer
+      - ../../HaveTodoServer:/app/HaveTodoServer
   rdb:
     image: postgres:14.4-alpine3.16
     container_name: rdb-ctr

@@ -25,11 +25,11 @@ std.uifの中に記載のあるエンドポイントまたは名称の補足と�
 | パスワード再発行画面      | /reissuePass                       | ×    | 画面     |
 | パスワード再発行受付完了画面  | Authentication Pass                   | ×    | ポップアップ |
 | パスワード再発行メール認証画面 | /auth/reissuePass?authToken=hogehoge | ×    | 画面     |
-| 習慣一覧画面         | /habits                                 | 〇    | 画面     |
-| 習慣新規登録画面       | /habits/create                              | 〇    | 画面  |
-| 習慣計画方法画面       | /howto                                | 〇    | 画面     |
-| 習慣一覧画面ヘッダー     | plan_header                           | 〇    | 画面     |
-| 習慣履歴           | /habits/history                              | 〇    | 画面     |
+| タスク一覧画面         | /havetodos                                 | 〇    | 画面     |
+| タスク新規登録画面       | /havetodos/create                              | 〇    | 画面  |
+| タスク計画方法画面       | /howto                                | 〇    | 画面     |
+| タスク一覧画面ヘッダー     | plan_header                           | 〇    | 画面     |
+| タスク履歴           | /havetodos/history                              | 〇    | 画面     |
 | パスワード変更画面       | /newpass                              | 〇    | 画面     |
 | クレジットカード変更画面    | /payment                               | 〇    | 画面  |
 | ログアウト完了画面       | Logout                                | 〇    | ポップアップ |

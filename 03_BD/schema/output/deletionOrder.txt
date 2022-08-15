@@ -1,12 +1,12 @@
 roles
 margin_time
 maintenance_plan
-executed_habit
+executed_task
 payment_job_history
 failed_auth
-planned_habit
+planned_task
 account
 timezones
 oauth_provider
-executed_habit_status
+executed_task_status
 currency

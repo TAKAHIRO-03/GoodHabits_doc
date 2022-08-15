@@ -1,7 +1,7 @@
-# GoodHabitsドキュメント
+# HaveTodoドキュメント
 
 ## 概要
-GoodHabitsのPJTに関するドキュメントが格納されています。
+HaveTodoのPJTに関するドキュメントが格納されています。
 マークダウンをベースに設計書が記載されており、一部PlantUMLやVSCode UIFlowで記載されているドキュメントがあります。
 
 ## 閲覧に必要なツール

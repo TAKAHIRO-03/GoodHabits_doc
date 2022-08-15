@@ -1,12 +1,12 @@
 currency
-executed_habit_status
+executed_task_status
 oauth_provider
 timezones
 account
-planned_habit
+planned_task
 failed_auth
 payment_job_history
-executed_habit
+executed_task
 maintenance_plan
 margin_time
 roles

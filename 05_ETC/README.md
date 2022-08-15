@@ -4,29 +4,29 @@
 * Docker Desktopがインストール済みであること。
 * 以下のディレクトリ構成となっていること
 ```
-./GoodHabits/GoodHabitsClient
-./GoodHabits/GoodHabitsServer
-./GoodHabits/GoodHabitsDoc
+./HaveTodo/HaveTodoClient
+./HaveTodo/HaveTodoServer
+./HaveTodo/HaveTodoDoc
 ```
 * リポジトリは以下
-  * [GoodHabitsClient](https://github.com/TAKAHIRO-03/GoodHabitsClient) 
-  * [GoodHabitsServer](https://github.com/TAKAHIRO-03/GoodHabitsServer)
-  * [GoodHabitsDoc](https://github.com/TAKAHIRO-03/GoodHabitsDoc) 
+  * [HaveTodoClient](https://github.com/TAKAHIRO-03/HaveTodoClient) 
+  * [HaveTodoServer](https://github.com/TAKAHIRO-03/HaveTodoServer)
+  * [HaveTodoDoc](https://github.com/TAKAHIRO-03/HaveTodoDoc) 
 
 ## コマンド
 ```
-GoodHabitsDoc/05_ETC $ pwd
-/c/workspace/GoodHabits/GoodHabitsDoc/05_ETC
+HaveTodoDoc/05_ETC $ pwd
+/c/workspace/HaveTodo/HaveTodoDoc/05_ETC
 
-GoodHabitsDoc/05_ETC $ bash run.sh -b # RESTAPIサーバとクライアントコンテナのビルド
+HaveTodoDoc/05_ETC $ bash run.sh -b # RESTAPIサーバとクライアントコンテナのビルド
 
 ...
 
-GoodHabitsDoc/05_ETC $ bash run.sh -s # 全コンテナスタート
+HaveTodoDoc/05_ETC $ bash run.sh -s # 全コンテナスタート
 
-GoodHabitsDoc/05_ETC $ bash run.sh -d # 全コンテナ削除
+HaveTodoDoc/05_ETC $ bash run.sh -d # 全コンテナ削除
 
-GoodHabitsDoc/05_ETC $ bash run.sh -r # 全コンテナ再起動
+HaveTodoDoc/05_ETC $ bash run.sh -r # 全コンテナ再起動
 
 ```
 

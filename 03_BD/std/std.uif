@@ -1,5 +1,5 @@
 [home_header]
-1-1:GoodHabitsとは
+1-1:HaveTodoとは
 1-2:特徴紹介
 1-3:使い方
 1-4:ユーザーの声
@@ -23,16 +23,16 @@ clk 1-7
 ==> Instagram
 
 [Twitter]
-2-1:GoodHabits公式アカウント
+2-1:HaveTodo公式アカウント
 --
 
 [Instagram]
-3-1:GoodHabits公式アカウント
+3-1:HaveTodo公式アカウント
 --
 
 [home_body]
 4-1:はじめる
-4-2:GoodHabitsとは
+4-2:HaveTodoとは
 4-3:特徴紹介
 4-4:ユーザーの声
 4-5:よくある質問
@@ -85,7 +85,7 @@ clk 5-6
 11-1:メールアドレスでログイン
 11-2:Googleでログイン
 11-3:アカウント作成
-11-4:GoodHabitsとは
+11-4:HaveTodoとは
 --
 clk 11-1
 ==>/login
@@ -104,7 +104,7 @@ clk 11-4
 12-5:ログイン
 --
 input 12-1,12-2 then clk 12-5
-==>/habits
+==>/havetodos
 clk 12-3
 ==>/reissuePass
 clk 12-4
@@ -130,8 +130,8 @@ clk 13-5
 [/auth/account?authToken=hogehoge]
 16-1:認証済み
 --
-clk me then redirect /habits
-==>/habits
+clk me then redirect /havetodos
+==>/havetodos
 
 [/reissuePass]
 17-1:メールアドレス
@@ -152,22 +152,22 @@ input 17-1 then clk 17-2
 input 19-1,19-2 then clk 19-3
 ==>/login
 
-[/habits]
+[/havetodos]
 20-1:計画する
 20-2:使い方
 20-3:計画済みタスク(N個)
 20-4:タスク削除
 --
 clk 20-1
-==>/habits/create
+==>/havetodos/create
 clk 20-2
 ==>/howto
 clk 20-3
-==>/habits/create
+==>/havetodos/create
 clk 20-4
-==>/habits
+==>/havetodos
 
-[/habits/create]
+[/havetodos/create]
 20-1:タイトル
 20-2:開始日時
 20-3:終了日時
@@ -178,17 +178,17 @@ clk 20-4
 20-8:登録
 --
 input 20-1,20-2,20-3,20-4,20-5,20-6,20-7 then clk 20-8
-==>/habits
+==>/havetodos
 
 [/howto]
 21-1:使い方（詳細）
 21-2:始める
 --
 clk 21-2
-==>/habits
+==>/havetodos
 
 [plan_header]
-22-1:GoodHabitsとは
+22-1:HaveTodoとは
 22-2:履歴
 22-3:パスワード変更
 22-4:決済方法
@@ -202,7 +202,7 @@ clk 21-2
 clk 22-1
 ==> /howto
 clk 22-2
-==> /habits/history
+==> /havetodos/history
 clk 22-3
 ==> /newpass
 clk 22-4
@@ -220,7 +220,7 @@ clk 22-9
 clk 22-10
 ==> mail app
 
-[/habits/history]
+[/havetodos/history]
 23-1:利用回数
 23-2:払わずに済んだ金額
 23-3:チャート
@@ -233,7 +233,7 @@ clk 22-10
 24-4:再発行する
 --
 input 24-1,24-2,24-3 then clk 24-4
-==>/habits
+==>/havetodos
 
 [/payment]
 25-1:クレジットカード番号
@@ -242,7 +242,7 @@ input 24-1,24-2,24-3 then clk 24-4
 25-4:登録する
 --
 input 25-1,25-2,25-3 then clk 25-4
-==>/habits
+==>/havetodos
 
 [Logout]
 26-1:ログアウトしました
@@ -266,4 +266,4 @@ input 25-1,25-2,25-3 then clk 25-4
 30-3:ログイン
 --
 input 30-1,30-2 then clk 30-3
-==>/habits
+==>/havetodos

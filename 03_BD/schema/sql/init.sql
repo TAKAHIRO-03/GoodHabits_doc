@@ -14,9 +14,9 @@ DROP TABLE IF EXISTS public.success_auth;
 
 DROP TABLE IF EXISTS public.failed_auth;
 
-DROP TABLE IF EXISTS public.planned_habit;
+DROP TABLE IF EXISTS public.planned_task;
 
-DROP TABLE IF EXISTS public.executed_habit;
+DROP TABLE IF EXISTS public.executed_task;
 
 DROP TABLE IF EXISTS public.margin_time;
 
@@ -29,7 +29,7 @@ COMMENT ON TABLE public.oauth_provider IS 'OAuthプロバイダー。サービ�
 COMMENT ON COLUMN public.oauth_provider.type IS 'GOOGLE、TWITTER等の文字列を表します。';
 
 ALTER TABLE
-  public.oauth_provider OWNER TO ghuser;
+  public.oauth_provider OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.timezones (
   name TEXT PRIMARY KEY,
@@ -49,7 +49,7 @@ COMMENT ON COLUMN public.timezones.utc_offset IS 'UTCからのオフセット(�
 COMMENT ON COLUMN public.timezones.is_dst IS '現在夏時間である場合に真';
 
 ALTER TABLE
-  public.timezones OWNER TO ghuser;
+  public.timezones OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.currency (
   iso_code TEXT PRIMARY KEY,
@@ -69,7 +69,7 @@ COMMENT ON COLUMN public.currency.sign IS '通貨記号 例）￥';
 COMMENT ON COLUMN public.currency.name IS '通貨名 例）円';
 
 ALTER TABLE
-  public.currency OWNER TO ghuser;
+  public.currency OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.account (
   id BIGSERIAL PRIMARY KEY,
@@ -107,7 +107,7 @@ COMMENT ON COLUMN public.account.is_locked IS 'アカウントロックBool値�
 
 COMMENT ON COLUMN public.account.timezones_name IS 'タイムゾーン。';
 
-COMMENT ON COLUMN public.account.currency_iso_code IS '習慣計画時のお金を払う際の通貨。';
+COMMENT ON COLUMN public.account.currency_iso_code IS 'タスク計画時のお金を払う際の通貨。';
 
 COMMENT ON COLUMN public.account.oauth_provider_type IS 'OAuthプロバイダーのタイプ。';
 
@@ -116,7 +116,7 @@ COMMENT ON COLUMN public.account.created_time IS '作成日時。';
 COMMENT ON COLUMN public.account.updated_time IS '更新日時。';
 
 ALTER TABLE
-  public.account OWNER TO ghuser;
+  public.account OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.roles (name VARCHAR(30) PRIMARY KEY);
 
@@ -125,7 +125,7 @@ COMMENT ON TABLE public.roles IS '権限情報。認可に使用する権限。'
 COMMENT ON COLUMN public.roles.name IS 'ロール値。';
 
 ALTER TABLE
-  public.roles OWNER TO ghuser;
+  public.roles OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.failed_auth (
   account_id BIGINT,
@@ -141,9 +141,9 @@ COMMENT ON COLUMN public.failed_auth.account_id IS 'アカウントID。';
 COMMENT ON COLUMN public.failed_auth.auth_ts IS '認証失敗時の時間。';
 
 ALTER TABLE
-  public.failed_auth OWNER TO ghuser;
+  public.failed_auth OWNER TO havetodouser;
 
-CREATE TABLE IF NOT EXISTS public.planned_habit (
+CREATE TABLE IF NOT EXISTS public.planned_task (
   id BIGSERIAL PRIMARY KEY,
   account_id BIGINT NOT NULL,
   title VARCHAR(100) NOT NULL CHECK (title <> ''),
@@ -158,65 +158,65 @@ CREATE TABLE IF NOT EXISTS public.planned_habit (
   FOREIGN KEY (account_id) REFERENCES public.account(id) ON DELETE CASCADE
 );
 
-COMMENT ON TABLE public.planned_habit IS '計画済み習慣情報。';
+COMMENT ON TABLE public.planned_task IS '計画済みタスク情報。';
 
-COMMENT ON COLUMN public.planned_habit.id IS '識別子。';
+COMMENT ON COLUMN public.planned_task.id IS '識別子。';
 
-COMMENT ON COLUMN public.planned_habit.account_id IS 'アカウントID。';
+COMMENT ON COLUMN public.planned_task.account_id IS 'アカウントID。';
 
-COMMENT ON COLUMN public.planned_habit.title IS 'タイトル。';
+COMMENT ON COLUMN public.planned_task.title IS 'タイトル。';
 
-COMMENT ON COLUMN public.planned_habit.start_time IS '開始日時。';
+COMMENT ON COLUMN public.planned_task.start_time IS '開始日時。';
 
-COMMENT ON COLUMN public.planned_habit.end_time IS '終了日時。';
+COMMENT ON COLUMN public.planned_task.end_time IS '終了日時。';
 
-COMMENT ON COLUMN public.planned_habit.cost IS '金額。';
+COMMENT ON COLUMN public.planned_task.cost IS '金額。';
 
-COMMENT ON COLUMN public.planned_habit.is_repeat IS '繰り返し登録された習慣=true, 繰り返し登録されていない習慣=false';
-
-ALTER TABLE
-  public.planned_habit OWNER TO ghuser;
-
-CREATE TABLE IF NOT EXISTS public.executed_habit_status (name TEXT PRIMARY KEY);
-
-COMMENT ON TABLE public.executed_habit_status IS '実行済み習慣のステータス';
-
-COMMENT ON COLUMN public.executed_habit_status.name IS '未達成=NOT_ACHIVED、 達成=ACHIVED、運営都合キャンセル=CANCELED';
+COMMENT ON COLUMN public.planned_task.is_repeat IS '繰り返し登録されたタスク=true, 繰り返し登録されていないタスク=false';
 
 ALTER TABLE
-  public.executed_habit_status OWNER TO ghuser;
+  public.planned_task OWNER TO havetodouser;
 
-CREATE TABLE IF NOT EXISTS public.executed_habit (
-  planned_habit_id BIGINT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS public.executed_task_status (name TEXT PRIMARY KEY);
+
+COMMENT ON TABLE public.executed_task_status IS '実行済みタスクのステータス';
+
+COMMENT ON COLUMN public.executed_task_status.name IS '未達成=NOT_ACHIVED、 達成=ACHIVED、運営都合キャンセル=CANCELED';
+
+ALTER TABLE
+  public.executed_task_status OWNER TO havetodouser;
+
+CREATE TABLE IF NOT EXISTS public.executed_task (
+  planned_task_id BIGINT PRIMARY KEY,
   started_time TIMESTAMPTZ,
   ended_time TIMESTAMPTZ,
-  executed_habit_status_name VARCHAR(30) NOT NULL DEFAULT 'CANCELED',
-  FOREIGN KEY (planned_habit_id) REFERENCES public.planned_habit(id) ON DELETE CASCADE,
-  FOREIGN KEY (executed_habit_status_name) REFERENCES public.executed_habit_status(name) ON DELETE CASCADE
+  executed_task_status_name VARCHAR(30) NOT NULL DEFAULT 'CANCELED',
+  FOREIGN KEY (planned_task_id) REFERENCES public.planned_task(id) ON DELETE CASCADE,
+  FOREIGN KEY (executed_task_status_name) REFERENCES public.executed_task_status(name) ON DELETE CASCADE
 );
 
-COMMENT ON TABLE public.executed_habit IS '実行済み習慣情報。';
+COMMENT ON TABLE public.executed_task IS '実行済みタスク情報。';
 
-COMMENT ON COLUMN public.executed_habit.planned_habit_id IS '計画済み習慣ID。';
+COMMENT ON COLUMN public.executed_task.planned_task_id IS '計画済みタスクID。';
 
-COMMENT ON COLUMN public.executed_habit.started_time IS '開始された日時。NULL=開始されていない。';
+COMMENT ON COLUMN public.executed_task.started_time IS '開始された日時。NULL=開始されていない。';
 
-COMMENT ON COLUMN public.executed_habit.ended_time IS '終了された日時。NULL=終了していない。';
+COMMENT ON COLUMN public.executed_task.ended_time IS '終了された日時。NULL=終了していない。';
 
-COMMENT ON COLUMN public.executed_habit.executed_habit_status_name IS '実行済みタスクの状態をあらわします。';
+COMMENT ON COLUMN public.executed_task.executed_task_status_name IS '実行済みタスクの状態をあらわします。';
 
 ALTER TABLE
-  public.executed_habit OWNER TO ghuser;
+  public.executed_task OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.payment_job_history (
-  planned_habit_id BIGINT PRIMARY KEY,
+  planned_task_id BIGINT PRIMARY KEY,
   executed_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (planned_habit_id) REFERENCES public.planned_habit(id) ON DELETE CASCADE
+  FOREIGN KEY (planned_task_id) REFERENCES public.planned_task(id) ON DELETE CASCADE
 );
 
 COMMENT ON TABLE public.payment_job_history IS '支払いのジョブ履歴。';
 
-COMMENT ON COLUMN public.payment_job_history.planned_habit_id IS '計画済み習慣ID。';
+COMMENT ON COLUMN public.payment_job_history.planned_task_id IS '計画済みタスクID。';
 
 COMMENT ON COLUMN public.payment_job_history.executed_time IS 'ジョブが実行された日時。';
 
@@ -226,14 +226,14 @@ CREATE TABLE IF NOT EXISTS public.margin_time (
   cancel_margin INTERVAL NOT NULL
 );
 
-COMMENT ON TABLE public.margin_time IS 'マージンの時間。単位は分。例）計画済み習慣±5分が実行完了とするの時間。この±5分を表す。';
+COMMENT ON TABLE public.margin_time IS 'マージンの時間。単位は分。例）計画済みタスク±5分が実行完了とするの時間。この±5分を表す。';
 
-COMMENT ON COLUMN public.margin_time.completed_margin IS '計画済み習慣の実行完了となる時間。';
+COMMENT ON COLUMN public.margin_time.completed_margin IS '計画済みタスクの実行完了となる時間。';
 
 COMMENT ON COLUMN public.margin_time.cancel_margin IS 'キャンセルすることが出来る時間。';
 
 ALTER TABLE
-  public.margin_time OWNER TO ghuser;
+  public.margin_time OWNER TO havetodouser;
 
 CREATE TABLE IF NOT EXISTS public.maintenance_plan (
   id SMALLSERIAL PRIMARY KEY,
@@ -251,4 +251,4 @@ COMMENT ON COLUMN public.maintenance_plan.start_time IS 'メンテナンス開�
 COMMENT ON COLUMN public.maintenance_plan.end_time IS 'メンテナンス終了時間';
 
 ALTER TABLE
-  public.maintenance_plan OWNER TO ghuser;
+  public.maintenance_plan OWNER TO havetodouser;

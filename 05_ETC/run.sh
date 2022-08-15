@@ -14,7 +14,7 @@ EOM
 
 function server_build {
 
-  # readonly server_path="//c//workspace//GoodHabits//GoodHabitsServer"
+  # readonly server_path="//c//workspace//HaveTodo//HaveTodoServer"
   readonly home_path="//c//Users/$(whoami)"
 
   # docker run -it --rm --name my-maven-project \
@@ -23,37 +23,37 @@ function server_build {
   #   -v "$server_path/target:/usr/src/mymaven/target" \
   #   -w //usr/src/mymaven maven:3.8.5-amazoncorretto-17 mvn clean package
 
-  docker build -t goodhabits/server:latest "../../GoodHabitsServer"
+  docker build -t havetodo/server:latest "../../HaveTodoServer"
   echo y | docker image prune # noneなイメージ削除
 }
 
 while getopts "sbdrh" optKey; do
   case "$optKey" in
     b)
-      docker build -t goodhabits/client:latest ../../GoodHabitsClient
-      # cd ../../GoodHabitsServer && ./mvnw compile jib:dockerBuild && cd "$PWD" #Jibを使ったイメージビルド
+      docker build -t havetodo/client:latest ../../HaveTodoClient
+      # cd ../../HaveTodoServer && ./mvnw compile jib:dockerBuild && cd "$PWD" #Jibを使ったイメージビルド
       server_build
       echo "Builded containers."
       exit 0
       ;;
     d)
-      docker-compose -p goodhabits down --volumes --remove-orphans # コンテナ等削除
-      docker-compose -p goodhabits ps # プロセス確認
+      docker-compose -p havetodo down --volumes --remove-orphans # コンテナ等削除
+      docker-compose -p havetodo ps # プロセス確認
       echo ""
       echo "Deleted containers."
       exit 0
       ;;
     r)
-      docker-compose -p goodhabits restart
-      docker-compose -p goodhabits ps # プロセス確認
+      docker-compose -p havetodo restart
+      docker-compose -p havetodo ps # プロセス確認
       echo ""
       echo "Restarted containers."
       exit 0
       ;;
     s)
-      docker-compose -p goodhabits up -d # 各コンテナ実行
+      docker-compose -p havetodo up -d # 各コンテナ実行
       sleep 3 # 開始ログを出力するために少しスリープ
-      docker-compose -p goodhabits ps # プロセス確認
+      docker-compose -p havetodo ps # プロセス確認
       echo ""
       echo "Start containers."
       exit 0
