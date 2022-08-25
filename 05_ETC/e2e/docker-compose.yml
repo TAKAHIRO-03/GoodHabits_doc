@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  e2e:
+    build: .
+    image: havetodo/e2e-test:latest
+    container_name: e2e-ctr
+    hostname: e2e-ctr
+    command: sh -c "npm ci && npm run cy:verify && while :; do sleep 10; done"
+    environment:
+      - CI=1
+    volumes:
+      - ./app:/app
+      - ./results:/results
