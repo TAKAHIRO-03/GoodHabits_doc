@@ -31,6 +31,7 @@ while getopts "sbdrh" optKey; do
   case "$optKey" in
     b)
       docker build -t havetodo/client:latest ../../HaveTodoClient
+      docker build -t havetodo/e2e:latest ../e2e
       # cd ../../HaveTodoServer && ./mvnw compile jib:dockerBuild && cd "$PWD" #Jibを使ったイメージビルド
       server_build
       echo "Builded containers."

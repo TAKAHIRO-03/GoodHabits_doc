@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   client:
@@ -8,11 +8,11 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
     ports:
-      - '8888:8888' # develop port
-      - '4173:4173' # preview port
+      - "8888:8888" # develop port
+      - "4173:4173" # preview port
     volumes:
       - ../../HaveTodoClient:/root/HaveTodoClient
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm ci && npm run dev"
   server:
     image: havetodo/server:latest
     depends_on:
@@ -21,10 +21,9 @@ services:
     container_name: server-ctr
     environment:
       - DD_API_KEY=${DD_API_KEY}
-      # - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000
     ports:
-      - '8080:8080'
-      - '8000:8000'
+      - "8080:8080"
+      - "8000:8000"
     volumes:
       - $HOME/.m2:/root/.m2
       - ../../HaveTodoServer:/app/HaveTodoServer
@@ -52,32 +51,42 @@ services:
       - "5431:5432"
     volumes:
       - $PWD/sql:/docker-entrypoint-initdb.d
-  nosql:
-      image: "redis:latest"
-      container_name: nosql-ctr
-      ports:
-        - "6379:6379"
-  dd-agent:
-      image: gcr.io/datadoghq/agent:7
-      container_name: datadog-ctr
-      environment:
-        - DD_API_KEY=${DD_API_KEY}
-        - DD_SITE=datadoghq.com
-        - DD_LOGS_ENABLED=true
-        - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
-        - DD_AC_EXCLUDE=image:gcr.io/datadoghq/agent
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-        - /proc/:/host/proc/:ro
-        - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
-        - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
-  mail:
-    image: mailhog/mailhog
-    container_name: mail-ctr
-    ports:
-      - "8025:8025"
+  e2e:
+    image: havetodo/e2e-test:latest
+    container_name: e2e-ctr
+    hostname: e2e-ctr
+    command: sh -c "npm ci && npm run cy:verify && while :; do sleep 10; done"
     environment:
-      # MH_STORAGE: mail
-      MH_MAILDIR_PATH: /tmp
-    # volumes:
-      # - mail:/tmp
+      - CI=1
+    volumes:
+      - ./e2e/app:/app
+      - ./e2e/results:/results
+  nosql:
+    image: "redis:latest"
+    container_name: nosql-ctr
+    ports:
+      - "6379:6379"
+  # dd-agent:
+  #     image: gcr.io/datadoghq/agent:7
+  #     container_name: datadog-ctr
+  #     environment:
+  #       - DD_API_KEY=${DD_API_KEY}
+  #       - DD_SITE=datadoghq.com
+  #       - DD_LOGS_ENABLED=true
+  #       - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+  #       - DD_AC_EXCLUDE=image:gcr.io/datadoghq/agent
+  #     volumes:
+  #       - /var/run/docker.sock:/var/run/docker.sock:ro
+  #       - /proc/:/host/proc/:ro
+  #       - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+  #       - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+  # mail:
+  #   image: mailhog/mailhog
+  #   container_name: mail-ctr
+  #   ports:
+  #     - "8025:8025"
+  #   environment:
+  #     MH_STORAGE: mail
+  #     MH_MAILDIR_PATH: /tmp
+  #   volumes:
+  #     - mail:/tmp

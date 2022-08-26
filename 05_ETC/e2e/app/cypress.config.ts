@@ -5,7 +5,7 @@ export default defineConfig({
   screenshotsFolder: "/results/screenshots",
   videosFolder: "/results/videos",
   e2e: {
-    baseUrl: "http://host.docker.internal:8888",
+    baseUrl: "http://client-ctr:8888",
     supportFile: false,
   },
 });
