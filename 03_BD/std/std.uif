@@ -104,7 +104,7 @@ clk 11-4
 12-5:ログイン
 --
 input 12-1,12-2 then clk 12-5
-==>/plannedTask
+==>/task
 clk 12-3
 ==>/reissuePass
 clk 12-4
@@ -130,8 +130,8 @@ clk 13-5
 [/auth/account?authToken=hogehoge]
 16-1:認証済み
 --
-clk me then redirect /plannedTask
-==>/plannedTask
+clk me then redirect /task
+==>/task
 
 [/reissuePass]
 17-1:メールアドレス
@@ -152,22 +152,22 @@ input 17-1 then clk 17-2
 input 19-1,19-2 then clk 19-3
 ==>/login
 
-[/plannedTask]
+[/task]
 20-1:計画する
 20-2:使い方
 20-3:計画済みタスク(N個)
 20-4:タスク削除
 --
 clk 20-1
-==>/plannedTask/create
+==>/task/create
 clk 20-2
 ==>/howto
 clk 20-3
-==>/plannedTask/create
+==>/task/create
 clk 20-4
-==>/plannedTask
+==>/task
 
-[/plannedTask/create]
+[/task/create]
 20-1:タイトル
 20-2:開始日時
 20-3:終了日時
@@ -178,14 +178,14 @@ clk 20-4
 20-8:登録
 --
 input 20-1,20-2,20-3,20-4,20-5,20-6,20-7 then clk 20-8
-==>/plannedTask
+==>/task
 
 [/howto]
 21-1:使い方（詳細）
 21-2:始める
 --
 clk 21-2
-==>/plannedTask
+==>/task
 
 [plan_header]
 22-1:HaveTodoとは
@@ -202,7 +202,7 @@ clk 21-2
 clk 22-1
 ==> /howto
 clk 22-2
-==> /plannedTask/history
+==> /task/history
 clk 22-3
 ==> /newpass
 clk 22-4
@@ -220,7 +220,7 @@ clk 22-9
 clk 22-10
 ==> mail app
 
-[/plannedTask/history]
+[/task/history]
 23-1:利用回数
 23-2:払わずに済んだ金額
 23-3:チャート
@@ -233,7 +233,7 @@ clk 22-10
 24-4:再発行する
 --
 input 24-1,24-2,24-3 then clk 24-4
-==>/plannedTask
+==>/task
 
 [/payment]
 25-1:クレジットカード番号
@@ -242,7 +242,7 @@ input 24-1,24-2,24-3 then clk 24-4
 25-4:登録する
 --
 input 25-1,25-2,25-3 then clk 25-4
-==>/plannedTask
+==>/task
 
 [Logout]
 26-1:ログアウトしました
@@ -266,4 +266,4 @@ input 25-1,25-2,25-3 then clk 25-4
 30-3:ログイン
 --
 input 30-1,30-2 then clk 30-3
-==>/plannedTask
+==>/task

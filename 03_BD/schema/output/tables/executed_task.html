@@ -116,7 +116,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="planned_task_id">planned_task_id</span></td>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="task_id">task_id</span></td>
                                     <td>int8</td>
                                     <td>19</td>
                                     <td title=''></td>
@@ -129,8 +129,8 @@
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                             <tr>
-                                                <td title="executed_task.planned_task_id references planned_task.id via executed_task_planned_task_id_fkey"><a href='planned_task.html'>planned_task</a><span class='relatedKey'>.id</span></td>
-                                                <td class="constraint detail">executed_task_planned_task_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                                <td title="executed_task.task_id references task.id via executed_task_task_id_fkey"><a href='task.html'>task</a><span class='relatedKey'>.id</span></td>
+                                                <td class="constraint detail">executed_task_task_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -219,7 +219,7 @@
                                     <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> executed_task_pkey</td>
                                     <td>Primary key</td>
                                     <td><span title='Ascending'>Asc</span></td>
-                                    <td>planned_task_id</td>
+                                    <td>task_id</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -246,7 +246,7 @@
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
 <area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="297,41,711,228">
 <area shape="rect" id="node2" href="executed_task_status.html" target="_top" title="executed_task_status" alt="" coords="5,169,253,263">
-<area shape="rect" id="node3" href="planned_task.html" target="_top" title="planned_task" alt="" coords="36,5,223,152">
+<area shape="rect" id="node3" href="task.html" target="_top" title="task" alt="" coords="60,5,199,152">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/executed_task.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
@@ -254,7 +254,7 @@
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
 <area shape="rect" id="node1" href="executed_task.html" target="_top" title="executed_task" alt="" coords="488,111,901,297">
 <area shape="rect" id="node2" href="executed_task_status.html" target="_top" title="executed_task_status" alt="" coords="196,201,444,295">
-<area shape="rect" id="node3" href="planned_task.html" target="_top" title="planned_task" alt="" coords="227,20,413,167">
+<area shape="rect" id="node3" href="task.html" target="_top" title="task" alt="" coords="251,20,389,167">
 <area shape="rect" id="node5" href="account.html" target="_top" title="account" alt="" coords="5,52,152,140">
 <area shape="rect" id="node4" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="572,5,817,93">
 </map>

@@ -3,29 +3,30 @@
    <sequences>
       <sequence increment="1" name="account_id_seq" startValue="1"/>
       <sequence increment="1" name="maintenance_plan_id_seq" startValue="1"/>
-      <sequence increment="1" name="planned_task_id_seq" startValue="1"/>
+      <sequence increment="1" name="task_id_seq" startValue="1"/>
    </sequences>
    <tables>
       <table name="account" numRows="0" remarks="アカウント情報。" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('account_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="アカウントID。" size="19" type="bigserial" typeCode="-5">
             <child column="account_id" foreignKey="failed_auth_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="failed_auth"/>
-            <child column="account_id" foreignKey="planned_task_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="planned_task"/>
+            <child column="account_id" foreignKey="task_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="task"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="username" nullable="false" remarks="ユーザー名。メールアドレスの形式で保持する。ログインIDとしても使用される。" size="256" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="username" nullable="false" remarks="ユーザー名。メールアドレスの形式で保持する。ログインIDとしても使用される。" size="256" type="varchar" typeCode="12">
+            <child column="username" foreignKey="account_roles_username_fkey" implied="false" onDeleteCascade="false" schema="public" table="account_roles"/>
+         </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="password" nullable="true" remarks="パスワード。ハッシュ化された状態で保持する。" size="60" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="roles" nullable="false" remarks="権限。1アカウントで複数の権限を保有している。" size="30" type="_varchar" typeCode="2003"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="is_locked" nullable="false" remarks="アカウントロックBool値。true=ロックされている。false=ロックされていない。" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="'Asia/Tokyo'::text" digits="0" id="5" name="timezones_name" nullable="false" remarks="タイムゾーン。" size="2147483647" type="text" typeCode="12">
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_locked" nullable="false" remarks="アカウントロックBool値。true=ロックされている。false=ロックされていない。" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="'Asia/Tokyo'::text" digits="0" id="4" name="timezones_name" nullable="false" remarks="タイムゾーン。" size="2147483647" type="text" typeCode="12">
             <parent column="name" foreignKey="account_timezones_name_fkey" implied="false" onDeleteCascade="false" schema="public" table="timezones"/>
          </column>
-         <column autoUpdated="false" defaultValue="'JPY'::text" digits="0" id="6" name="currency_iso_code" nullable="false" remarks="タスク計画時のお金を払う際の通貨。" size="2147483647" type="text" typeCode="12">
+         <column autoUpdated="false" defaultValue="'JPY'::text" digits="0" id="5" name="currency_iso_code" nullable="false" remarks="タスク計画時のお金を払う際の通貨。" size="2147483647" type="text" typeCode="12">
             <parent column="iso_code" foreignKey="account_currency_iso_code_fkey" implied="false" onDeleteCascade="false" schema="public" table="currency"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="oauth_provider_type" nullable="true" remarks="OAuthプロバイダーのタイプ。" size="2147483647" type="text" typeCode="12">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="oauth_provider_type" nullable="true" remarks="OAuthプロバイダーのタイプ。" size="2147483647" type="text" typeCode="12">
             <parent column="type" foreignKey="account_oauth_provider_type_fkey" implied="false" onDeleteCascade="false" schema="public" table="oauth_provider"/>
          </column>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="8" name="created_time" nullable="false" remarks="作成日時。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="9" name="updated_time" nullable="false" remarks="更新日時。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="7" name="created_time" nullable="false" remarks="作成日時。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="8" name="updated_time" nullable="false" remarks="更新日時。" size="35" type="timestamptz" typeCode="93"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="account_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -35,6 +36,20 @@
          </index>
          <checkConstraint constraint="(((password)::text &lt;&gt; ''::text))" name="account_password_check"/>
          <checkConstraint constraint="(((username)::text &lt;&gt; ''::text))" name="account_username_check"/>
+      </table>
+      <table name="account_roles" numRows="0" remarks="アカウントとユーザーの権限を管理する。" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="username" nullable="false" remarks="ユーザー名（メールアドレス）" size="256" type="varchar" typeCode="12">
+            <parent column="username" foreignKey="account_roles_username_fkey" implied="false" onDeleteCascade="false" schema="public" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="roles" nullable="false" remarks="権限名。" size="30" type="varchar" typeCode="12">
+            <parent column="name" foreignKey="account_roles_roles_fkey" implied="false" onDeleteCascade="false" schema="public" table="roles"/>
+         </column>
+         <primaryKey column="username" sequenceNumberInPK="1"/>
+         <primaryKey column="roles" sequenceNumberInPK="2"/>
+         <index name="account_roles_pkey" unique="true">
+            <column ascending="true" name="username"/>
+            <column ascending="true" name="roles"/>
+         </index>
       </table>
       <table name="currency" numRows="0" remarks="通貨。サービス開始前に定義される。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="iso_code" nullable="false" remarks="ISOコード 例）JPY" size="2147483647" type="text" typeCode="12">
@@ -49,21 +64,21 @@
          </index>
       </table>
       <table name="executed_task" numRows="0" remarks="実行済みタスク情報。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="planned_task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="executed_task_planned_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="planned_task"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
+            <parent column="id" foreignKey="executed_task_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="task"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="started_time" nullable="true" remarks="開始された日時。NULL=開始されていない。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="ended_time" nullable="true" remarks="終了された日時。NULL=終了していない。" size="35" type="timestamptz" typeCode="93"/>
          <column autoUpdated="false" defaultValue="'CANCELED'::character varying" digits="0" id="3" name="executed_task_status_name" nullable="false" remarks="実行済みタスクの状態をあらわします。" size="30" type="varchar" typeCode="12">
             <parent column="name" foreignKey="executed_task_executed_task_status_name_fkey" implied="false" onDeleteCascade="true" schema="public" table="executed_task_status"/>
          </column>
-         <primaryKey column="planned_task_id" sequenceNumberInPK="1"/>
+         <primaryKey column="task_id" sequenceNumberInPK="1"/>
          <index name="executed_task_pkey" unique="true">
-            <column ascending="true" name="planned_task_id"/>
+            <column ascending="true" name="task_id"/>
          </index>
       </table>
       <table name="executed_task_status" numRows="0" remarks="実行済みタスクのステータス" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="未達成=NOT_ACHIVED、 達成=ACHIVED、運営都合キャンセル=CANCELED" size="2147483647" type="text" typeCode="12">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="未達成=NOT_ACHIEVED、 達成=ACHIEVED、運営都合キャンセル=CANCELED" size="2147483647" type="text" typeCode="12">
             <child column="executed_task_status_name" foreignKey="executed_task_executed_task_status_name_fkey" implied="false" onDeleteCascade="true" schema="public" table="executed_task"/>
          </column>
          <primaryKey column="name" sequenceNumberInPK="1"/>
@@ -113,45 +128,49 @@
          </index>
       </table>
       <table name="payment_job_history" numRows="0" remarks="支払いのジョブ履歴。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="planned_task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="payment_job_history_planned_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="planned_task"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="task_id" nullable="false" remarks="計画済みタスクID。" size="19" type="int8" typeCode="-5">
+            <parent column="id" foreignKey="payment_job_history_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="task"/>
          </column>
          <column autoUpdated="false" defaultValue="CURRENT_TIMESTAMP" digits="6" id="1" name="executed_time" nullable="false" remarks="ジョブが実行された日時。" size="35" type="timestamptz" typeCode="93"/>
-         <primaryKey column="planned_task_id" sequenceNumberInPK="1"/>
+         <primaryKey column="task_id" sequenceNumberInPK="1"/>
          <index name="payment_job_history_pkey" unique="true">
-            <column ascending="true" name="planned_task_id"/>
+            <column ascending="true" name="task_id"/>
          </index>
-      </table>
-      <table name="planned_task" numRows="0" remarks="計画済みタスク情報。" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('planned_task_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="識別子。" size="19" type="bigserial" typeCode="-5">
-            <child column="planned_task_id" foreignKey="executed_task_planned_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="executed_task"/>
-            <child column="planned_task_id" foreignKey="payment_job_history_planned_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="payment_job_history"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="account_id" nullable="false" remarks="アカウントID。" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="planned_task_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="account"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="title" nullable="false" remarks="タイトル。" size="100" type="varchar" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="start_time" nullable="false" remarks="開始日時。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="end_time" nullable="false" remarks="終了日時。" size="35" type="timestamptz" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="cost" nullable="false" remarks="金額。" size="131089" type="numeric" typeCode="2"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_repeat" nullable="false" remarks="繰り返し登録されたタスク=true, 繰り返し登録されていないタスク=false" size="1" type="bool" typeCode="-7"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="planned_task_pkey" unique="true">
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="planned_task_account_id_tstzrange_excl" unique="false">
-            <column ascending="true" name="account_id"/>
-         </index>
-         <checkConstraint constraint="((start_time &lt; end_time))" name="planned_task_check"/>
-         <checkConstraint constraint="((0.0 &lt; cost))" name="planned_task_cost_check"/>
-         <checkConstraint constraint="(((title)::text &lt;&gt; ''::text))" name="planned_task_title_check"/>
       </table>
       <table name="roles" numRows="0" remarks="権限情報。認可に使用する権限。" schema="public" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="ロール値。" size="30" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="ロール値。" size="30" type="varchar" typeCode="12">
+            <child column="roles" foreignKey="account_roles_roles_fkey" implied="false" onDeleteCascade="false" schema="public" table="account_roles"/>
+         </column>
          <primaryKey column="name" sequenceNumberInPK="1"/>
          <index name="roles_pkey" unique="true">
             <column ascending="true" name="name"/>
          </index>
+      </table>
+      <table name="task" numRows="0" remarks="計画済みタスク情報。" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('task_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="識別子。" size="19" type="bigserial" typeCode="-5">
+            <child column="task_id" foreignKey="executed_task_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="executed_task"/>
+            <child column="task_id" foreignKey="payment_job_history_task_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="payment_job_history"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="account_id" nullable="false" remarks="アカウントID。" size="19" type="int8" typeCode="-5">
+            <parent column="id" foreignKey="task_account_id_fkey" implied="false" onDeleteCascade="true" schema="public" table="account"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="title" nullable="false" remarks="タイトル。" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="タスクの説明" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="start_time" nullable="false" remarks="開始日時。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="end_time" nullable="false" remarks="終了日時。" size="35" type="timestamptz" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="cost" nullable="false" remarks="金額。" size="131089" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_repeat" nullable="false" remarks="繰り返し登録されたタスク=true, 繰り返し登録されていないタスク=false" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="task_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="task_account_id_tstzrange_excl" unique="false">
+            <column ascending="true" name="account_id"/>
+         </index>
+         <checkConstraint constraint="((start_time &lt; end_time))" name="task_check"/>
+         <checkConstraint constraint="((0.0 &lt; cost))" name="task_cost_check"/>
+         <checkConstraint constraint="(((title)::text &lt;&gt; ''::text))" name="task_title_check"/>
+         <checkConstraint constraint="(((title)::text &lt;&gt; ''::text))" name="task_title_check1"/>
       </table>
       <table name="timezones" numRows="0" remarks="タイムゾーン。サービス開始前に定義される。pg_timezone_nameと同じ内容となる。" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="name" nullable="false" remarks="時間帯名" size="2147483647" type="text" typeCode="12">

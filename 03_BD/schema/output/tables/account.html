@@ -129,8 +129,8 @@
                                                 <td class="constraint detail">failed_auth_account_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
                                             </tr>
                                             <tr>
-                                                <td title="planned_task.account_id references account.id via planned_task_account_id_fkey"><a href='planned_task.html'>planned_task</a><span class='relatedKey'>.account_id</span></td>
-                                                <td class="constraint detail">planned_task_account_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
+                                                <td title="task.account_id references account.id via task_account_id_fkey"><a href='task.html'>task</a><span class='relatedKey'>.account_id</span></td>
+                                                <td class="constraint detail">task_account_id_fkey<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -149,6 +149,10 @@
                                     <td>null</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="account_roles.username references account.username via account_roles_username_fkey"><a href='account_roles.html'>account_roles</a><span class='relatedKey'>.username</span></td>
+                                                <td class="constraint detail">account_roles_username_fkey<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -175,29 +179,12 @@
                                     <td><p>パスワード。ハッシュ化された状態で保持する。</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="roles">roles</span></td>
-                                    <td>_varchar</td>
-                                    <td>30</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>権限。1アカウントで複数の権限を保有している。</p></td>
-                                </tr>
-                                <tr>
                                     <td><span id="is_locked">is_locked</span></td>
                                     <td>bool</td>
                                     <td>1</td>
                                     <td title=''></td>
                                     <td title=''></td>
-                                    <td>null</td>
+                                    <td>false</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
@@ -394,25 +381,28 @@
                                 <div class="tab-content no-padding">
                                     <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,87,607,449">
-<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,265,184,383">
-<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,400,208,493">
-<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,131,189,248">
-<area shape="rect" id="node5" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="658,5,830,128">
-<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="651,145,837,292">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,172,607,505">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,321,184,439">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,456,208,549">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,187,189,304">
+<area shape="rect" id="node5" href="account_roles.html" target="_top" title="account_roles" alt="" coords="651,309,841,432">
+<area shape="rect" id="node6" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="660,5,832,128">
+<area shape="rect" id="node7" href="task.html" target="_top" title="task" alt="" coords="677,145,815,292">
 </map>
                                         <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/account.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>
                                     <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
                                         <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,148,607,511">
-<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,327,184,444">
-<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,461,208,555">
-<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,192,189,309">
-<area shape="rect" id="node5" href="executed_task.html" target="_top" title="executed_task" alt="" coords="907,5,1101,93">
-<area shape="rect" id="node6" href="planned_task.html" target="_top" title="planned_task" alt="" coords="651,55,837,201">
-<area shape="rect" id="node7" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="658,219,830,341">
-<area shape="rect" id="node8" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="881,111,1127,199">
+<area shape="rect" id="node1" href="account.html" target="_top" title="account" alt="" coords="252,148,607,481">
+<area shape="rect" id="node2" href="currency.html" target="_top" title="currency" alt="" coords="29,297,184,415">
+<area shape="rect" id="node3" href="oauth_provider.html" target="_top" title="oauth_provider" alt="" coords="5,432,208,525">
+<area shape="rect" id="node4" href="timezones.html" target="_top" title="timezones" alt="" coords="25,163,189,280">
+<area shape="rect" id="node5" href="account_roles.html" target="_top" title="account_roles" alt="" coords="651,413,841,536">
+<area shape="rect" id="node6" href="roles.html" target="_top" title="roles" alt="" coords="367,499,492,587">
+<area shape="rect" id="node7" href="executed_task.html" target="_top" title="executed_task" alt="" coords="911,5,1105,93">
+<area shape="rect" id="node8" href="task.html" target="_top" title="task" alt="" coords="677,55,815,201">
+<area shape="rect" id="node9" href="failed_auth.html" target="_top" title="failed_auth" alt="" coords="660,219,832,341">
+<area shape="rect" id="node10" href="payment_job_history.html" target="_top" title="payment_job_history" alt="" coords="885,111,1131,199">
 </map>
                                         <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/account.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
                                     </div>

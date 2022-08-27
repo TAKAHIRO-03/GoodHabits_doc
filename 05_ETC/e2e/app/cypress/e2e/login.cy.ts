@@ -7,7 +7,7 @@ describe("Login", () => {
 
     // TODO verify cookies(jwt)
 
-    cy.url().should("include", "/plannedTask");
+    cy.url().should("include", "/task");
   });
   it("nothing email", () => {
     cy.visit("/login");
