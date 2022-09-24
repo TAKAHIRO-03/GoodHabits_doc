@@ -36,16 +36,15 @@ HaveTodoDoc/05_ETC $ bash run.sh -r # 全コンテナ再起動
 
 ## ポート
 
-| 論理名                      | コンテナ名   | ポート                    |
-| --------------------------- | ------------ | ------------------------- |
-| クライアント(React)         | client-ctr   | 8888                      |
-| RESTAPI サーバ(SpringBoot)  | server-ctr   | 8080 ※debug ポートは 8000 |
-| RDB（PostgreSQL）           | rdb-ctr      | 5432                      |
-| RDB（PostgreSQL） ※テスト用 | rdb-test-ctr | 5431                      |
-| NoSQL(Redis)                | nosql-ctr    | 6379                      |
-| DatadogAgent                | datadog-ctr  | -                         |
-| MailHog                     | mail-ctr     | 8025                      |
-| E2E テスト(Cypress)         | e2e-ctr      | -                         |
+| 論理名                     | コンテナ名  | ポート |
+| -------------------------- | ----------- | ------ |
+| クライアント(React)        | client-ctr  | 8888   |
+| RESTAPI サーバ(SpringBoot) | server-ctr  | 8080   |
+| RDB（PostgreSQL）          | rdb-ctr     | 5432   |
+| NoSQL(Redis)               | nosql-ctr   | 6379   |
+| DatadogAgent               | datadog-ctr | -      |
+| MailHog                    | mail-ctr    | 8025   |
+| E2E テスト(Cypress)        | e2e-ctr     | -      |
 
 "ホストポート：コンテナポート"は同じポート番号でマッピングしているため、`localhost:8080`等で通信をすることが可能。
 
